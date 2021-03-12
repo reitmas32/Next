@@ -24,6 +24,7 @@
 #include <commands/import_command.hpp>
 #include <commands/upgrade_command.hpp>
 #include <commands/clear_command.hpp>
+#include <commands/get_command.hpp>
 
 #include <tools/read_conf.hpp>
 

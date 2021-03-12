@@ -84,6 +84,12 @@ void ManagerCommand::initialize(int argc, char const *argv[])
         {
             this->stackCommand.append(new PathCommand());
         }
+        else if (line == "get" || line == "-g")
+        {
+            if (read_conf() == -1)
+                return;
+            this->stackCommand.append(new GetCommand());
+        }
         else
         {
             list_args += " " + line;

@@ -3,11 +3,7 @@
 ClearCommand::ClearCommand(/* args */)
     : CommandBase()
 {
-#if defined(_WIN32)
-    this->command += "cd build\\Release && app.exe";
-#elif defined(__linux)
     this->command += "rm -r " + NextData::getInstance()->build_dir;
-#endif
 }
 
 ClearCommand::~ClearCommand()

@@ -42,6 +42,7 @@ public:
     std::string build_system_exe;
     std::vector<std::string> build_system_flags;
     std::vector<std::string> cmake_flags;
+    std::vector<std::string> local_dependencies;
 
     void printData()
     {
@@ -62,6 +63,11 @@ public:
         }
         std::cout << "build_system_flags" << '\n';
         for (auto flag : NextData::getInstance()->build_system_flags)
+        {
+            std::cout << flag << '\n';
+        }
+        std::cout << "local_dependencies" << '\n';
+        for (auto flag : NextData::getInstance()->local_dependencies)
         {
             std::cout << flag << '\n';
         }

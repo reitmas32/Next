@@ -94,5 +94,7 @@ int read_conf()
         return -1;
     if (readVector("build_system_flags", NextData::getInstance()->build_system_flags, root) != 0)
         return -1;
+    if (readVector("local_dependencies", NextData::getInstance()->local_dependencies, root) != 0)
+        return -1;
     return 0;
 }
