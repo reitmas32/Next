@@ -16,9 +16,19 @@ class Node_t:
     
     def __init__(self, data):
         self.data = data
+        self.childs = []
+
+    def __str__(self):
+        return 'Node: ' + str(self.data)
         
     def new_child(self,child):
         self.childs.append(child)
         
     def lenChilds(self):
         return self.childs.count()
+
+    def deepTravers(self, func, num_deep = 0, *args):
+        func(self.data, num_deep, args)
+        if len(self.childs) > 0:
+            for c in self.childs:
+                c.deepTravers(func, num_deep + 1)
