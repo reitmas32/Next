@@ -2,7 +2,7 @@
 import datetime 
 
 # Local Packages
-from src.models.dependencie import Dependencie_t
+from src.models.dependencie_t import Dependencie_t
 from src.models.config_t import config_t as Config_t
 import src.funcs.includes
 import src.tool.messages as MESSAGES_tools
