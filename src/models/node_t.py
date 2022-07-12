@@ -27,8 +27,8 @@ class Node_t:
     def lenChilds(self):
         return self.childs.count()
 
-    def deepTravers(self, func, num_deep = 0, *args):
-        func(self.data, num_deep, args)
+    def deepTravers(self, func, args:dict, num_deep = 0):
+        func(self.data, num_deep, args=args)
         if len(self.childs) > 0:
             for c in self.childs:
-                c.deepTravers(func, num_deep + 1)
+                c.deepTravers(func, num_deep = num_deep + 1, args = args)
