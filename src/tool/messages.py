@@ -26,7 +26,7 @@ if system != 'Linux':
     init(convert = True)
 
 def message_error(messageStr: str):
-    if OUTPUT_ACTIVATED == True : print(f'{Fore.RED}{Style.BRIGHT} <<ERROR>> {Style.RESET_ALL}' + messageStr)
+    print(f'{Fore.RED}{Style.BRIGHT} <<ERROR>> {Style.RESET_ALL}' + messageStr)
     
 def message_warning(messageStr: str):
     if OUTPUT_ACTIVATED == True : print(f'{Fore.YELLOW}{Style.BRIGHT} <<WARNING>> {Style.RESET_ALL}' + messageStr)
