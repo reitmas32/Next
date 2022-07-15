@@ -16,6 +16,7 @@ import os
 import src.funcs.read_config
 import src.funcs.write_config
 import src.tool.messages as MESSAGES_tools
+import src.tool.types as TYPES_tools
 
 def set(property, value):
     """Set a property to the current project
@@ -44,7 +45,7 @@ def set(property, value):
         value_of_property = config_obj.set(property, value)
 
         #If it was set correctly
-        if(value_of_property != "null"):
+        if(type(value_of_property) != '<class \'TYPES_tools.NullType\'>'):
             
             #Write the new config
             src.funcs.write_config.write_property(config_obj, dir_project)

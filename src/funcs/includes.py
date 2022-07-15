@@ -11,6 +11,7 @@
 
 import src.funcs.read_config
 import src.tool.messages as MESSAGES_tools
+import src.tool.types as TYPES_tools
 
 def get_includes(route: str):
     
@@ -20,9 +21,11 @@ def get_includes(route: str):
         
         # Read config of proyect
         config_obj = src.funcs.read_config.read_config(route)
-        
-        for include in config_obj.get('include_dirs'):
-            list_includes.append(include)
+        includes = config_obj.get('include_dirs')
+        type_include = type(includes)
+        if type_include != TYPES_tools.nullType():
+            for include in includes:
+                list_includes.append(include)
         
     except OSError as exc:
         # Message(Error): OSError generate

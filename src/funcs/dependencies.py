@@ -12,6 +12,7 @@
 # Local Packages
 import src.funcs.read_config
 import src.tool.messages as MESSAGES_tools
+import src.tool.types as TYPES_tools
 
 
 def get_dependencies(route: str):
@@ -25,7 +26,7 @@ def get_dependencies(route: str):
         
         dependencies = config_obj.get('dependencies')
         
-        if dependencies is not None:
+        if type(dependencies) != TYPES_tools.nullType():
 
             for name_include in dependencies:
                 

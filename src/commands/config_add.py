@@ -16,6 +16,7 @@ import os
 import src.funcs.read_config
 import src.funcs.write_config
 import src.tool.messages as MESSAGES_tools
+import src.tool.types as TYPES_tools
 
 def add(property, value):
     """Adds a new property to the current project
@@ -44,7 +45,7 @@ def add(property, value):
         value_of_property = config_obj.add(property, value)
 
         #If it was added correctly
-        if(value_of_property != "null"):
+        if(type(value_of_property) != TYPES_tools.nullType()):
             
             #Write the new config
             src.funcs.write_config.write_property(config_obj, dir_project)

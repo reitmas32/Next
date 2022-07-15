@@ -15,6 +15,7 @@ import ruamel.yaml
 # Packges Local
 import src.tool.messages as MESSAGES_tools
 import src.tool.yaml as YAML_tools
+import src.tool.types as TYPES_tools
 
 def listToString(l):
     """Convert a list to a string
@@ -81,8 +82,10 @@ class config_t:
         """
         try:
             value = self._data[property]
+            if value == None:
+                value = TYPES_tools.NullType()
         except:
-            value = "null"
+            value = TYPES_tools.NullType()
         return value
 
     def set(self, property, value):
@@ -101,7 +104,7 @@ class config_t:
             new_value = self._data[property]
         except:
             MESSAGES_tools.message_error("Property does not exist")
-            new_value = "null"
+            new_value = TYPES_tools.NullType()
         return new_value
 
     def add(self, property, value):
@@ -119,7 +122,7 @@ class config_t:
             new_value = self._data[property]
         except:
             MESSAGES_tools.message_error("Property does not exist")
-            new_value = "null"
+            new_value = TYPES_tools.NullType()
         return new_value
 
     def to_map(self):

@@ -17,6 +17,7 @@ import src.funcs.read_config
 import src.tool.messages as MESSAGES_tools
 import src.tool.yaml as YAML_tools
 import src.tool.string as STR_tools
+import src.tool.types as TYPES_tools
 
 def get(property, comments = True):
     """Get a property to the current project
@@ -44,7 +45,7 @@ def get(property, comments = True):
         value_of_property = config_obj.get(property)
         
         #If it was added correctly
-        if(value_of_property != "null"):
+        if(type(value_of_property) != TYPES_tools.nullType()):
             
             value_of_property_str = YAML_tools.object_to_yaml_str(value_of_property).replace("...", "")
             
