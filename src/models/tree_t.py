@@ -5,6 +5,7 @@ import datetime
 from src.models.dependencie_t import Dependencie_t
 from src.models.config_t import config_t as Config_t
 import src.funcs.includes
+import src.funcs.dependencies
 import src.tool.messages as MESSAGES_tools
 import src.tool.json as JSON_tools
 from src.models.node_t import Node_t as Node_t
