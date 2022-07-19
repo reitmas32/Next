@@ -24,7 +24,7 @@ def get_library(route: str):
         library_yaml = config_obj.get('library')
         type_library = type(library_yaml)
         if type_library != TYPES_tools.nullType():
-            library = library_yaml
+            library = route + '/' + library_yaml
         
     except OSError as exc:
         # Message(Error): OSError generate
