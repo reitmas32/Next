@@ -5,7 +5,7 @@
 #       Project        #
 ########################
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include ${INCLUDE_EXTERN} ${INCLUDE_LOCAL})
 set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 #Add Dependencies
@@ -71,4 +71,7 @@ endif()
 target_link_libraries(${APP}
     #ibraries
     ${LIBS}
+    ${EXTERN_LIBS}
 )
+
+target_compile_features(${APP} PUBLIC cxx_std_20)

@@ -3,13 +3,23 @@ type_project: __type_project__
 description: Hello World in Moon
 version: v0.0.1
 build_dir: __build_dir__
+include_dirs:
+- include
+dependencies:
+  # hello_world:
+  #   name: Name
+  #   date: 19/07/2022
+  #   dir: dir_of__dependencie
 name_build: __name_build__
-build_system_exe: __build_system_exe__
-c_compiler: __c_compiler__
-cxx_compiler: __cxx_compiler__
-build_system: __build_system__
-cmake_flags: []
-build_system_flags: []
+builds:
+  cmake_release:
+    base: cmake
+    build_system_exe: make
+    c_compiler: gcc
+    cxx_compiler: g++
+    build_system: Unix Makefiles
+    cmake_flags: []
+    build_system_flags: []
 commands:
   src: cd src
 #  test: g++ test/test.cpp -o build/test

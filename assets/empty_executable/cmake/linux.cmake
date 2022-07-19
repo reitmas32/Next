@@ -5,7 +5,7 @@
 #       Project        #
 ########################
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include  ${INCLUDE_EXTERN} ${INCLUDE_LOCAL})
 set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 #Add Dependencies
@@ -29,17 +29,47 @@ include_directories(
 file( GLOB_RECURSE LIB_SOURCES ${SOURCE_DIR}/*.cpp )
 file( GLOB_RECURSE LIB_HEADERS ${INCLUDE_DIR}/*.hpp )
 
-########################
-#     Add Source of    #
-#       Project        #
-########################
-#TODO: add_library
-add_executable(
-    ${APP} 
-    ${LIB_SOURCES} 
-    ${LIB_HEADERS}
-)
+if( static_library AND static_library STREQUAL "on")
+
+    ########################
+    #     Add Source of    #
+    #    Static Library    #
+    ########################
+    add_library(
+        ${APP} STATIC
+        ${LIB_SOURCES} 
+        ${LIB_HEADERS}
+    )
+
+elseif(dynamic_library AND dynamic_library STREQUAL "on")
+
+    ########################
+    #     Add Source of    #
+    #   Dynamic Library    #
+    ########################
+    add_library(
+        ${APP} SHARED
+        ${LIB_SOURCES} 
+        ${LIB_HEADERS}
+    )
+
+elseif(executable AND executable STREQUAL "on")
+
+    ########################
+    #     Add Source of    #
+    #       Project        #
+    ########################
+    #TODO: add_library
+    add_executable(
+        ${APP} 
+        ${LIB_SOURCES} 
+        ${LIB_HEADERS}
+    )
+endif()
+
+
 target_link_libraries(${APP}
     #ibraries
     ${LIBS}
+    ${EXTERN_LIBS}
 )
