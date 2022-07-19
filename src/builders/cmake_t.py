@@ -12,6 +12,7 @@
 #System Packages
 import subprocess
 import os
+import platform
 
 # Local Packages
 
@@ -19,6 +20,19 @@ from src.models.config_t import config_t as Config_t
 import src.tool.messages as MESSAGES_tools
 import src.funcs.includes as INCLUDE_funcs
 import src.tool.string as STRING_tools
+from src.models.tree_t import Tree_t as Tree_t
+from src.models.tree_t import Dependencie_t as Dependencie_t
+
+_list_includes = []
+_list_libraries = []
+
+def _getIncludes(dependencie: Dependencie_t, num_deep: int , args:dict):
+    if dependencie.include != '':
+        args['_list_includes'] += dependencie.include
+    
+def _getLibraries(dependencie: Dependencie_t, num_deep: int , args:dict):
+    if dependencie.library != '':
+        args['_list_libraries'].append(dependencie.library)
 
 class Cmake_t:
     
@@ -38,7 +52,8 @@ class Cmake_t:
         c_compiler: str, 
         cxx_compiler: str, 
         cmake_flags: list,
-        include_dirs: list
+        include_dirs: list,
+        libs: list
         ):
 
         command = []
@@ -50,9 +65,10 @@ class Cmake_t:
         command.append(dir + "/.")
 
         # Add BuildSystem
-        if(STRING_tools.countWord(build_system) == 1):
+        if(STRING_tools.countWord(build_system) == 1 or platform.system() == 'Linux'):
             command.append( "-G"  + build_system  )
         else: 
+            
             command.append( "-G" + "\"" + build_system + "\""  )
 
         # Add C compiler
@@ -68,7 +84,12 @@ class Cmake_t:
         command += cmake_flags
 
         #Add inlucde Local
-        command.append( "-DINCLUDE_LOCAL=\"" + STRING_tools.listToStr(include_dirs, ";") + "\"" )
+        if len(include_dirs) > 0:
+            command.append( "-DINCLUDE_LOCAL=\"" + STRING_tools.listToStr(include_dirs, ";") + "\"" )
+        
+        #Add libs Local
+        if len(libs) > 0:
+            command.append( "-DEXTERN_LIBS=" + STRING_tools.listToStr(libs, ";")  )
 
         return command
 
@@ -95,7 +116,14 @@ class Cmake_t:
 
         # Get the include local
         include_local = INCLUDE_funcs.get_includes(self.this_dir)
-        
+
+        # Get the Tree
+        tree = Tree_t(self.this_dir)
+        # Get INcludes of Project and dependencies
+        tree.deepTravers(_getIncludes, args = {'_list_includes': _list_includes})
+        # Get libs and dependencies
+        tree.deepTravers(_getLibraries, args = {'_list_libraries': _list_libraries})
+
         # Desactivate the output
         MESSAGES_tools.OUTPUT_ACTIVATED = False
         
@@ -107,7 +135,8 @@ class Cmake_t:
                 cxx_compiler=self.config_build["cxx_compiler"],
                 type_project=config_obj.get("type_project"),
                 cmake_flags=self.config_build["cmake_flags"],
-                include_dirs=include_local
+                include_dirs=include_local + _list_includes,
+                libs=_list_libraries
             )
 
         # Run the Cmake Command
@@ -118,7 +147,6 @@ class Cmake_t:
             build_system_exce=self.config_build["build_system_exe"],
             build_system_flags=self.config_build["build_system_flags"]
         )
-
         # Run the command of build system
         subprocess.run(buildSystemCommand)
 
