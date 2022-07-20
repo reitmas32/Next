@@ -20,6 +20,7 @@ from src.models.config_t import config_t as Config_t
 import src.tool.messages as MESSAGES_tools
 import src.funcs.includes as INCLUDE_funcs
 import src.tool.string as STRING_tools
+import src.tool.os as OS_tools
 from src.models.tree_t import Tree_t as Tree_t
 from src.models.tree_t import Dependencie_t as Dependencie_t
 
@@ -111,7 +112,9 @@ class Cmake_t:
         
         # Into in the directory of build
         os.chdir(config_obj.get("build_dir"))
-        os.mkdir(self.build_name)
+        # Mkdir build_dir
+        OS_tools.mkdirDir(self.build_name)
+        #os.mkdir(self.build_name)
         os.chdir(self.build_name)
 
         # Get the include local
