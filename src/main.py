@@ -26,6 +26,11 @@ import src.commands.config_add as Config_Add
 import src.tool.env as ENV_tools
 import src.commands.exce_next as Exce_Next
 import src.commands.use_next as Use_Next
+import src.funcs.tree as Tree_funcs
+import src.tool.types as TYPES_tools
+
+# Packages System
+import os
 
 ### Update 02/06/2022
 ### ✓ create                   Create a new Next project.
@@ -128,10 +133,23 @@ def add(property: str, value):
 def exce(command: str):
     Exce_Next.exce(command)
     
-@main.command('use', short_help='Add new library in current project')
-@click.argument('library')
-def use(library: str):
-    Use_Next.use_path(library)
+@main.command('import', short_help='Add new library in current project')
+@click.argument('name_dependencie')
+@click.option('--dir', required=True, type=str, help='Select Dir of dependencie')
+def import_command(name_dependencie: str, dir: str):
+    Use_Next.use_path(name_dependencie, dir)
+
+@main.command('tree', short_help='Run a project of Next')
+def tree():
+    this_dir = os.getcwd()
+
+    Tree_funcs.printTree(dir=this_dir)
+    
+@main.command('export', short_help='Export library of current project')
+@click.argument('library', required=True, type=str, metavar='libraryPath')
+def export(library):
+    if type(Config_Set.set('library', library)) == TYPES_tools.nullType():
+        Config_Add.add('library', library)
     
 #if __name__ == "__main__":
 #main()
