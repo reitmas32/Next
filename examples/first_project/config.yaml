@@ -1,0 +1,26 @@
+name_project: first_project
+type_project: executable
+description: Hello World in Moon
+version: v0.0.1
+build_dir: build
+include_dirs:
+- include
+dependencies:
+  # hello_world:
+  #   name: Name
+  #   date: 19/07/2022
+  #   dir: dir_of__dependencie
+name_build: app
+builds:
+  cmake_release:
+    base: cmake
+    build_system_exe: make
+    c_compiler: gcc
+    cxx_compiler: g++
+    build_system: Unix Makefiles
+    cmake_flags: []
+    build_system_flags: []
+commands:
+  src: cd src
+#  test: g++ test/test.cpp -o build/test
+#  run-test: ./build/test
