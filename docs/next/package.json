@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "help": "astro --help",
+    "clean": "rm -r dist"
   },
   "dependencies": {
     "@algolia/client-search": "^4.13.1",
