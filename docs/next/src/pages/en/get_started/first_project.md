@@ -39,7 +39,7 @@ NEXT_PACKAGES_DIR= /home/user/Next_Packages
 
 ```
 
-The cmake folder will be explained in more detail in the [builder Cmake](https://www.next-project.com/builders/cmake)
+The cmake folder will be explained in more detail in the [builder Cmake](/en/builders/cmake)
 
 The more import is a *config.yaml* file
 
