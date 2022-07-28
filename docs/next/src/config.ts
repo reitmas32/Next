@@ -16,7 +16,6 @@ export const OPEN_GRAPH = {
 
 export const KNOWN_LANGUAGES = {
 	English: 'en',
-	Spanish: 'es',
 };
 
 // Uncomment this to add an "Edit this page" button to every page of documentation.
@@ -49,17 +48,5 @@ export const SIDEBAR = {
 
 		{ text: 'Builders', header: true },
 		{ text: 'Cmake', link: 'en/builders/cmake' },
-		{ text: 'Gradle', link: 'en/builders/gradle' },
-		{ text: 'Maven', link: 'en/builders/maven' },
-
-		{ text: 'Commands', header: true },
-		{ text: 'Create', link: 'en/commands/create' },
-		{ text: 'Build', link: 'en/commands/build' },
-
-		{ text: 'Custom Commands', header: true },
-		{ text: 'What\'s a Custom Commands', link: 'en/custom_commands/what_s_custom_commands' },
-		{ text: 'pBuild', link: 'en/custom_commands/pbuild' },
-		{ text: 'pRun', link: 'en/custom_commands/prun' },
-		{ text: 'pTest', link: 'en/custom_commands/ptest' },
 	],
 };
