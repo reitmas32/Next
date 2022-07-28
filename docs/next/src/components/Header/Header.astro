@@ -8,6 +8,8 @@ import GitHubButton from "./GitHubButton.tsx";
 import LanguageSelect from "./LanguageSelect.tsx";
 import Search from "./Search.tsx";
 
+import ThemeToggleButton from "../RightSidebar/ThemeToggleButton.tsx";
+
 const { currentPage } = Astro.props;
 const lang = currentPage && getLanguageFromURL(currentPage);
 ---
@@ -25,6 +27,7 @@ const lang = currentPage && getLanguageFromURL(currentPage);
 			</a>
 		</div>
 		<div style="flex-grow: 1;"></div>
+		<ThemeToggleButton client:visible />
 		{KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}
 		{CONFIG.ALGOLIA && (
 			<div class="search-item">
