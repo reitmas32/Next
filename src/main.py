@@ -32,7 +32,7 @@ import src.tool.types as TYPES_tools
 # Packages System
 import os
 
-### Update 02/06/2022
+### Update 22/07/2022
 ### ✓ create                   Create a new Next project.
 ### ✓ build                    Build this project
 ### ✓ run                      Run your app
@@ -43,8 +43,10 @@ import os
 ### ✓ get                      Get to property of current Next Project
 ### ✓ set                      Set to property of current Next Project
 ### ✓ exce                     Excecute a command perzonalized
+### ✓ import                   Import a new library
+### ✓ tree                     Get the tree of current project
+### ✓ export                   Export the library .a .so .lib .dll
 
-### × use                      Use a new library
 ### × remove                   Remove a library
 ### × install                  Install a Plugin
 ### × upgrade                  Upgrade a Plugin or Next
