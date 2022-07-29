@@ -19,6 +19,7 @@ import src.funcs.read_config
 import src.tool.file as FILE_tools
 import src.tool.messages as MESSAGES_tools
 import src.funcs.write_config as WRITE_funcs
+import src.tool.types as TYPES_tools
 
 # Packages Dependencies
 import ruamel.yaml.comments
@@ -51,7 +52,11 @@ def use_path(name_dependencie, library_dir):
         name_project = str(config_lib.get('name_project'))
         
         # Find the name in current dependencies
-        dependencies_list =list(dependencies)
+        dependencies_list = []
+        if type(dependencies) != TYPES_tools.nullType():
+            dependencies_list =list(dependencies)
+        else: 
+            dependencies = {}
         
         if name_dependencie in dependencies_list:
             
