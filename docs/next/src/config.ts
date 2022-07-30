@@ -38,8 +38,8 @@ export const SIDEBAR = {
 		{ text: 'Get Started', header: true },
 		{ text: 'Introduction', link: 'en/get_started/introduction' },
 		{ text: 'Install and Setup', link: 'en/get_started/install' },
-		{ text: 'Config.yaml Basic', link: 'en/get_started/config_yaml_basic' },
 		{ text: 'First Project', link: 'en/get_started/first_project' },
+		{ text: 'Config.yaml Basic', link: 'en/get_started/config_yaml_basic' },
 
 		{ text: 'Examples', header: true },
 		{ text: 'Empty Project', link: 'en/examples/empty_project' },
