@@ -9,6 +9,15 @@
 ### status = Production
 ######################################################################
 
+## Plublish Test
+## sudo apt install twine
+## python3 -m build
+## twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+##
+## Publish Release
+## sudo apt install twine
+## python3 -m build
+## twine upload dist/*
 
 #Dependencies Packages
 from setuptools import setup
@@ -22,7 +31,7 @@ setup(
     name = 'next-pm',
     
     # Directory of code
-    packages = ['src'],
+    packages = ['src', 'src/commands', 'src/builders', 'src/funcs', 'src/models', 'src/tool'],
     
     # Import files without extension .py
     include_package_data=True,
