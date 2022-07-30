@@ -16,10 +16,7 @@ const GitHubButton: FunctionalComponent = () => {
 	
 	return (
 		<button>
-			<img src="../../public/github.svg" alt="my image" onClick={(e) => {
-			e.preventDefault();
-			window.location.href='https://github.com/reitmas32/Next';
-			}} />
+			<img src="../../public/github.svg" alt="my image" onClick={()=> window.open('https://github.com/reitmas32/Next', "_blank")}/>
 		</button>
 	);
 };
