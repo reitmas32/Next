@@ -4,6 +4,8 @@ obj/
 build/
 doc/
 documentation/
+dist/
+*.egg-info
 
 __pycache__/
 src/models/__pycache__/
