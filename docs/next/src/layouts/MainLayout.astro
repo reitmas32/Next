@@ -18,7 +18,11 @@ const githubEditUrl = CONFIG.GITHUB_EDIT_URL && CONFIG.GITHUB_EDIT_URL + current
 	<head>
 		<HeadCommon />
 		<HeadSEO {content} canonicalURL={Astro.canonicalURL} />
-		<title>{content.title ? `${content.title} 🚀 ${CONFIG.SITE.title}` : CONFIG.SITE.title}</title>
+		<!--<title>{content.title ? `${content.title} 🚀 ${CONFIG.SITE.title}` : CONFIG.SITE.title}</title>-->
+		<title>Next</title>
+		<link rel = "icon" href = 
+"https://raw.githubusercontent.com/reitmas32/Next/dev/docs/next/public/next-logo-small.png" 
+        type = "image/x-icon">
 		<style>
 			body {
 				width: 100%;
