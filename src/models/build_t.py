@@ -11,6 +11,7 @@
 
 import src.models.config_t
 import src.builders.cmake_t
+import src.builders.basic_t
 import src.tool.messages as MESSAGES_tools
 
 class Build_t:
@@ -67,6 +68,8 @@ class Build_t:
             # Selctor of base of Build
             if self.config_build['base'] == 'cmake':
                 self.builder = src.builders.cmake_t.Cmake_t(self.config_build, self.this_dir, self.build_name)
+            if self.config_build['base'] == 'basic':
+                self.builder = src.builders.basic_t.Basic_t(self.config_build, self.this_dir, self.build_name)
         except KeyError as exc:
             
             # Message(Error): OSError generate
