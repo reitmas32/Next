@@ -1,4 +1,7 @@
 bin/
+lib/
+lib64
+lib64/
 .vscode
 obj/
 build/
