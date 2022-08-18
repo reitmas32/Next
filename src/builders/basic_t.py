@@ -10,7 +10,6 @@
 ######################################################################
 
 #System Packages
-from distutils.command.build_ext import extension_name_re
 import subprocess
 import os
 import platform
@@ -50,15 +49,45 @@ class Basic_t:
 
     def _generateCommand(
         dir: str, 
+        build_dir: str,
+        name_build: str,
         type_project: str, 
         c_compiler: str, 
-        cxx_compiler: str, 
+        cxx_compiler: str,
+        c_compiler_regex: str,
+        cxx_compiler_regex: str,
         include_dirs: list,
         libs: list,
         c_source: list,
-        cxx_source: list
+        cxx_source: list,
+        extension_files: list
         ):
-        # TODO: Hacer un .sh para ejecutar la linea -> $CXX $FILE -o $FILE.o para cada archivo recivido en cxx_source
+        # TODO: Hacer un .sh para ejecutar la linea -> $CXX $FILE -o $FILE_OUT para cada archivo recivido en cxx_source
+        
+        def generate_compile_lines(source: list, compiler_hash: str, compiler: str):
+            
+            compile_lines = []
+            
+            for file in source:
+                line_compile = cxx_compiler_regex
+                line_compile = line_compile.replace(compiler_hash, compiler)
+                
+                path_file_out = dir + '/' + build_dir + '/' + name_build + file.replace(dir, '') + '.o'
+
+                for ext in extension_files:
+                    path_file_out = path_file_out.replace(ext + '.o', '.o')
+                
+                line_compile = line_compile.replace('$FILE_OUT', path_file_out)
+                line_compile = line_compile.replace('$FILE', file)
+                compile_lines.append(line_compile)
+                
+            return compile_lines
+                
+        cxx_compile_lines = generate_compile_lines(source=cxx_source, compiler_hash='$CXX', compiler=cxx_compiler)
+        c_compile_lines = generate_compile_lines(source=c_source, compiler_hash='$C', compiler=c_compiler)
+        
+        print(cxx_compile_lines)
+        
         return 'command basic'
     
     
@@ -170,18 +199,21 @@ class Basic_t:
         sourceCXX = self._getSource('source_cxx')
         sourceC = self._getSource('source_c')
         
-        print(sourceCXX)
-        
         # create command of Cmake
         command = Basic_t._generateCommand(
                 dir=self.this_dir,
+                build_dir=config_obj.get('build_dir'),
+                name_build=self.build_name,
                 c_source=sourceC,
                 cxx_source=sourceCXX,
                 c_compiler=self.config_build["c_compiler"],
                 cxx_compiler=self.config_build["cxx_compiler"],
+                c_compiler_regex=self.config_build["c_compiler_regex"],
+                cxx_compiler_regex=self.config_build["cxx_compiler_regex"],
                 type_project=config_obj.get("type_project"),
                 include_dirs=include_local + _list_includes,
-                libs=_list_libraries
+                libs=_list_libraries,
+                extension_files=self.config_build["extension_files"]
             )
 
         # Run the Cmake Command
