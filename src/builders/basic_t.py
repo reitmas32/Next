@@ -201,19 +201,19 @@ class Basic_t:
         
         # create command of Cmake
         command = Basic_t._generateCommand(
-                dir=self.this_dir,
-                build_dir=config_obj.get('build_dir'),
-                name_build=self.build_name,
-                c_source=sourceC,
-                cxx_source=sourceCXX,
-                c_compiler=self.config_build["c_compiler"],
-                cxx_compiler=self.config_build["cxx_compiler"],
-                c_compiler_regex=self.config_build["c_compiler_regex"],
-                cxx_compiler_regex=self.config_build["cxx_compiler_regex"],
-                type_project=config_obj.get("type_project"),
-                include_dirs=include_local + _list_includes,
-                libs=_list_libraries,
-                extension_files=self.config_build["extension_files"]
+                dir                 = self.this_dir,
+                name_build          = self.build_name,
+                build_dir           = config_obj.get('build_dir'),
+                type_project        = config_obj.get("type_project"),
+                c_compiler          = self.config_build.get("c_compiler")           if self.config_build.get("c_compiler")          != None else 'gcc',
+                cxx_compiler        = self.config_build.get("cxx_compiler")         if self.config_build.get("cxx_compiler")        != None else 'g++',
+                c_compiler_regex    = self.config_build.get("c_compiler_regex")     if self.config_build.get("c_compiler_regex")    != None else '$C -c $FILE -o $FILE_OUT',
+                cxx_compiler_regex  = self.config_build.get("cxx_compiler_regex")   if self.config_build.get("cxx_compiler_regex")  != None else '$CXX -c $FILE -o $FILE_OUT',
+                extension_files     = self.config_build.get("extension_files")      if self.config_build.get("extension_files" )    != None else ['.c', '.cc', '.cpp'],
+                c_source            = sourceC,
+                cxx_source          = sourceCXX,
+                include_dirs        = include_local + _list_includes,
+                libs                = _list_libraries,
             )
 
         # Run the Cmake Command
