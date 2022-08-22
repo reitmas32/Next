@@ -66,7 +66,12 @@ class Basic_t:
         cxx_source: list,
         extension_files: list
         ):
-        # TODO: Hacer un .sh para ejecutar la linea -> $CXX $FILE -o $FILE_OUT para cada archivo recivido en cxx_source
+        # Get Our Files from dict    
+        def getOutFiles(compile_lines: list):
+            lines = []
+            for file in compile_lines:
+                lines.append(file['path_file_out'])
+            return lines
         
         # Generate compile lines with format $CXX -c $FILE -o $FILE_OUT
         def generate_compile_lines(source: list, compiler_hash: str, compiler: str, compiler_regex: str):
@@ -139,6 +144,10 @@ class Basic_t:
         for i in include_dirs:
             linker_line += ' -I' + i
             
+        # Add Libraries 
+        for lib in libs:
+            linker_line += ' ' + lib
+            
         # Open script of bash
         f = open( 'basic_build.sh', 'w')
             
@@ -154,13 +163,6 @@ class Basic_t:
             
             # Write line to compile
             f.write(file['line_compile'] + '\n\n')
-        
-        # Get Our Files from dict    
-        def getOutFiles(compile_lines: list):
-            lines = []
-            for file in compile_lines:
-                lines.append(file['path_file_out'])
-            return lines
             
         
         # Write Message 
@@ -294,8 +296,8 @@ class Basic_t:
                 extension_files     = self.config_build.get("extension_files")      if self.config_build.get("extension_files" )    != None else ['.c', '.cc', '.cpp'],
                 c_source            = sourceC,
                 cxx_source          = sourceCXX,
-                include_dirs        = include_local + _list_includes,
-                libs                = _list_libraries,
+                include_dirs        = list(set(include_local + _list_includes)),
+                libs                = list(set(_list_libraries)),
             )
 
         MESSAGES_tools.OUTPUT_ACTIVATED = True
