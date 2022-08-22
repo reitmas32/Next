@@ -10,9 +10,8 @@
 ######################################################################
 
 #System Packages
-import subprocess
 import os
-import platform
+import stat
 
 # Local Packages
 
@@ -24,6 +23,8 @@ import src.tool.types as TYPES_tools
 import src.tool.os as OS_tools
 from src.models.tree_t import Tree_t as Tree_t
 from src.models.tree_t import Dependencie_t as Dependencie_t
+
+import bash
 
 _list_includes = []
 _list_libraries = []
@@ -50,12 +51,15 @@ class Basic_t:
     def _generateCommand(
         dir: str, 
         build_dir: str,
-        name_build: str,
+        builder_name: str,
+        name_out: str,
         type_project: str, 
         c_compiler: str, 
         cxx_compiler: str,
+        linker: str,
         c_compiler_regex: str,
         cxx_compiler_regex: str,
+        linker_regex: str,
         include_dirs: list,
         libs: list,
         c_source: list,
@@ -64,31 +68,117 @@ class Basic_t:
         ):
         # TODO: Hacer un .sh para ejecutar la linea -> $CXX $FILE -o $FILE_OUT para cada archivo recivido en cxx_source
         
-        def generate_compile_lines(source: list, compiler_hash: str, compiler: str):
+        # Generate compile lines with format $CXX -c $FILE -o $FILE_OUT
+        def generate_compile_lines(source: list, compiler_hash: str, compiler: str, compiler_regex: str):
             
             compile_lines = []
             
             for file in source:
-                line_compile = cxx_compiler_regex
+                
+                #Init with regex
+                line_compile = compiler_regex
+                
+                # Remplace compiler example: $CXX -c $FILE -o $FILE_OUT -> g++ -c $FILE -o $FILE_OUT
                 line_compile = line_compile.replace(compiler_hash, compiler)
                 
-                path_file_out = dir + '/' + build_dir + '/' + name_build + file.replace(dir, '') + '.o'
-
+                # Create path of output file
+                path_file_out = dir + '/' + build_dir + '/' + builder_name + file.replace(dir, '') + '.o'
+                
+                # Remove extension of source code example: main.cpp.o -> main.o
                 for ext in extension_files:
                     path_file_out = path_file_out.replace(ext + '.o', '.o')
                 
+                # Remplace path of output file example: g++ -c $FILE -o $FILE_OUT -> g++ -c $FILE -o build/basic/main.o
                 line_compile = line_compile.replace('$FILE_OUT', path_file_out)
                 line_compile = line_compile.replace('$FILE', file)
-                compile_lines.append(line_compile)
+                
+                # Add Include dirs
+                for i in include_dirs:
+                    line_compile += ' -I' + i
+                
+                # Apped dict of data in compile_lines
+                compile_lines.append(
+                    {
+                        'line_compile':line_compile, 
+                        'path_file_out': path_file_out
+                    }
+                )
                 
             return compile_lines
                 
-        cxx_compile_lines = generate_compile_lines(source=cxx_source, compiler_hash='$CXX', compiler=cxx_compiler)
-        c_compile_lines = generate_compile_lines(source=c_source, compiler_hash='$C', compiler=c_compiler)
+        # Create compile lines of C++
+        cxx_compile_lines = generate_compile_lines(
+            source          = cxx_source, 
+            compiler_hash   = '$CXX', 
+            compiler        = cxx_compiler, 
+            compiler_regex  = cxx_compiler_regex,
+            )
         
-        print(cxx_compile_lines)
+        # Create compile lines of C
+        c_compile_lines = generate_compile_lines(
+            source          = c_source, 
+            compiler_hash   = '$C', 
+            compiler        = c_compiler, 
+            compiler_regex  = c_compiler_regex
+            )
+            
+        # Add linker
+        linker_line = linker_regex
         
-        return 'command basic'
+        linker_line = linker_line.replace('$LD', linker)
+        
+        #Add Filer out
+        linker_line = linker_line.replace(
+            '$FILES', 
+            STRING_tools.listToStr(getOutFiles(cxx_compile_lines) + getOutFiles(c_compile_lines), separator=' '))
+        
+        #Add final file
+        linker_line = linker_line.replace('$FILE_OUT', name_out)
+        
+        # Add Include dirs
+        for i in include_dirs:
+            linker_line += ' -I' + i
+            
+        # Open script of bash
+        f = open( 'basic_build.sh', 'w')
+            
+        # Write lines to compile
+        for file in cxx_compile_lines + c_compile_lines:
+            
+            # Create dirs
+            index_dirs_of_file = file['path_file_out'].rfind('/')
+            OS_tools.mkdirDir(file['path_file_out'][:index_dirs_of_file])
+            
+            # Write Message
+            f.write( '#Generate: ' + file['path_file_out'] + '\n')
+            
+            # Write line to compile
+            f.write(file['line_compile'] + '\n\n')
+        
+        # Get Our Files from dict    
+        def getOutFiles(compile_lines: list):
+            lines = []
+            for file in compile_lines:
+                lines.append(file['path_file_out'])
+            return lines
+            
+        
+        # Write Message 
+        f.write( '#Generate: ' + name_out + '\n')
+        
+        # Write linker line
+        f.write( linker_line + '\n')
+            
+        f.close()
+        
+        # Change permise of file
+        st = os.stat( 'basic_build.sh')
+        os.chmod( 'basic_build.sh', st.st_mode | stat.S_IEXEC)
+        
+        # Run script
+        bash.bash(dir + '/' + build_dir + '/' + builder_name + '/' + 'basic_build.sh')
+                
+        return
     
     
     def _getSource(self, source_name='source_c') -> list:
@@ -137,6 +227,7 @@ class Basic_t:
                     
                     # Message(SuperWarning): OSError generate
                     MESSAGES_tools.message_error(s_file_path + ' Not is a File')
+
             else:
                 
                 # Get index recursive in string
@@ -151,22 +242,10 @@ class Basic_t:
                 # Create full path of Dir
                 s_dir_path = self.this_dir + '/' + s
                 
-                # Loop for sub files 
-                for file in os.listdir(s_dir_path):
-                    
-                    # Complete path off File
-                    s_file_path: str = s_dir_path + file
-                    
-                    # Check if s_file_path is a FIle and contains extension_files
-                    if os.path.isfile(s_file_path) and s_file_path.find(extension_files) != -1:
-                        
-                        # Add File in source_list
-                        source_list.append(s_file_path)
-                    else:
-                        
-                        # Message(SuperWarning): OSError generate
-                        MESSAGES_tools.message_error(s_file_path + ' Not is a File')
-        return source_list
+                #Apped files with extension
+                source_list += OS_tools.find_files_for_ext(dir=s_dir_path,ext=extension_files)
+            
+        return list(set(source_list))
     
     def build(self,config_obj: Config_t):
         
@@ -199,28 +278,24 @@ class Basic_t:
         sourceCXX = self._getSource('source_cxx')
         sourceC = self._getSource('source_c')
         
-        # create command of Cmake
-        command = Basic_t._generateCommand(
+        # create command of Basic
+        Basic_t._generateCommand(
                 dir                 = self.this_dir,
-                name_build          = self.build_name,
+                builder_name        = self.build_name,
+                name_out            = self.config_build.get("name_out")           if self.config_build.get("name_out")          != None else self.build_name,
                 build_dir           = config_obj.get('build_dir'),
                 type_project        = config_obj.get("type_project"),
                 c_compiler          = self.config_build.get("c_compiler")           if self.config_build.get("c_compiler")          != None else 'gcc',
                 cxx_compiler        = self.config_build.get("cxx_compiler")         if self.config_build.get("cxx_compiler")        != None else 'g++',
+                linker              = self.config_build.get("linker")               if self.config_build.get("linker")              != None else 'g++',
                 c_compiler_regex    = self.config_build.get("c_compiler_regex")     if self.config_build.get("c_compiler_regex")    != None else '$C -c $FILE -o $FILE_OUT',
                 cxx_compiler_regex  = self.config_build.get("cxx_compiler_regex")   if self.config_build.get("cxx_compiler_regex")  != None else '$CXX -c $FILE -o $FILE_OUT',
+                linker_regex        = self.config_build.get("linker_regex")         if self.config_build.get("linker_regex")        != None else '$LD $FILES -o $FILE_OUT',
                 extension_files     = self.config_build.get("extension_files")      if self.config_build.get("extension_files" )    != None else ['.c', '.cc', '.cpp'],
                 c_source            = sourceC,
                 cxx_source          = sourceCXX,
                 include_dirs        = include_local + _list_includes,
                 libs                = _list_libraries,
             )
-
-        # Run the Cmake Command
-        #subprocess.run(command)
-        print(command)
-        # Run the command of build system
-        #subprocess.run(buildSystemCommand)
-
 
         MESSAGES_tools.OUTPUT_ACTIVATED = True
