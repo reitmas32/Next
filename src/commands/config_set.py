@@ -3,7 +3,7 @@
 ### copyright = Copyright 2020-2022, Next Project 
 ### date = 20/03/2022
 ### license = PSF
-### version = 3.3.4 
+### version = 3.4.0 
 ### maintainer = Rafael Zamora 
 ### email = rafa.zamora.ram@gmail.com 
 ### status = Production

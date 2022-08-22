@@ -64,7 +64,7 @@ NEXT_PACKAGES_DIR:<DIR_OF_NEXT_PACKAGES> > env.yaml
 
 ### Future versions
 
-The current version of Next is **v3.3.4** but the development of Next is in constant evolution and it is planned to have for the next versions:
+The current version of Next is **v3.4.0** but the development of Next is in constant evolution and it is planned to have for the next versions:
 #### Commands
 - **next upgrade** Easy update of **Next**
 - **next test** Integration of **Next** and Unit Testing
