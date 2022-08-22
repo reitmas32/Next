@@ -25,3 +25,14 @@ def mkdirDir(dir:str):
         # Message(Waiting): The dir folder already exists
         MESSAGES_tools.message_warning("Warning " + dir +  " folder already exists")
                 
+def find_files_for_ext(dir: str, ext = '.py'):
+    files_with_ext = []
+    
+    # Iter files rcursive
+    for path, currentDirectory, files in os.walk(dir):
+        
+        # Added files to list
+        files_with_ext += [os.path.join(path, f) for f in files if f.endswith(ext)]
+    
+    # Return files
+    return files_with_ext
