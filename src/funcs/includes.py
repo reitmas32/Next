@@ -26,6 +26,8 @@ def get_includes(route: str):
         if type_include != TYPES_tools.nullType():
             for include in includes:
                 list_includes.append(route + '/' + include)
+                
+            list_includes.append(route)
         
     except OSError as exc:
         # Message(Error): OSError generate
