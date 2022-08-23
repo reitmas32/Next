@@ -48,5 +48,22 @@ export const SIDEBAR = {
 
 		{ text: 'Builders', header: true },
 		{ text: 'Cmake', link: 'en/builders/cmake' },
+		{ text: 'Basic', link: 'en/builders/basic' },
+
+		{ text: 'Commands', header: true },
+		{ text: 'Create', link: 'en/commands/create' },
+		{ text: 'Build', link: 'en/commands/build' },
+		{ text: 'Clean', link: 'en/commands/clean' },
+		{ text: 'Info', link: 'en/commands/info' },
+		{ text: 'Version', link: 'en/commands/version' },
+		{ text: 'Tree', link: 'en/commands/tree' },
+		{ text: 'Run', link: 'en/commands/run' },
+		{ text: 'Export', link: 'en/commands/export' },
+		{ text: 'Import', link: 'en/commands/import' },
+		{ text: 'Get', link: 'en/commands/get' },
+		{ text: 'Set', link: 'en/commands/set' },
+		{ text: 'Add', link: 'en/commands/add' },
+		{ text: 'Exce', link: 'en/commands/exce' },
+		{ text: 'Check_env', link: 'en/commands/check_env' },
 	],
 };

@@ -1,29 +1,24 @@
 ---
-title: Build Command
-description: How Build the Project
+title: Exec Command
+description: Execute a custom command
 layout: ../../../layouts/MainLayout.astro
 ---
 
 #### Description
 
-Build Next project
+Execute a custom command
 
 #### Arguments and Options of Command
 
 
 | Property   | Description     | Default          | Required | Type             | Example       |
 | ---------- | --------------- | ---------------- | -------- | ---------------- | ------------- |
-| build_name | Name of Builder | First in $builds | No       | string, argument | cmake_release |
+| command | Name of custom command | None | Yes       | string, argument | test |
 
 #### Examples
 
 
 ``` bash
-# Basic use
-next build
-```
-
-``` bash
-# Full use
-next build cmake_release
+# How to use
+next exec test
 ```
