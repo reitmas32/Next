@@ -3,7 +3,7 @@
 ### copyright = Copyright 2020-2022, Next Project 
 ### date = 25/04/2022
 ### license = PSF
-### version = 3.3.4
+### version = 3.4.0
 ### maintainer = Rafael Zamora 
 ### email = rafa.zamora.ram@gmail.com 
 ### status = Production
@@ -37,7 +37,7 @@ setup(
     include_package_data=True,
     
     # Version Current of Next
-    version = '3.3.4',
+    version = '3.4.0',
     
     # Short description
     description = 'Next is a C/C++ project manager, it is designed as a solution to the administration that this type of projects require.',

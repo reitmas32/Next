@@ -1,29 +1,24 @@
 ---
-title: Build Command
-description: How Build the Project
+title: Export Command
+description: How Export library
 layout: ../../../layouts/MainLayout.astro
 ---
 
 #### Description
 
-Build Next project
+How Export library
 
 #### Arguments and Options of Command
 
 
 | Property   | Description     | Default          | Required | Type             | Example       |
 | ---------- | --------------- | ---------------- | -------- | ---------------- | ------------- |
-| build_name | Name of Builder | First in $builds | No       | string, argument | cmake_release |
+| library | Library to export | None | Yes       | string, argument | build/my_lib.a |
 
 #### Examples
 
 
 ``` bash
-# Basic use
-next build
-```
-
-``` bash
-# Full use
-next build cmake_release
+# Haw use
+next export build/my_lib.a
 ```

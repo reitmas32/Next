@@ -3,13 +3,14 @@
 ### copyright = Copyright 2020-2022, Next Project 
 ### date = 29/01/2022
 ### license = PSF
-### version = 3.3.4 
+### version = 3.4.0 
 ### maintainer = Rafael Zamora 
 ### email = rafa.zamora.ram@gmail.com 
 ### status = Production
 ######################################################################
 
 # Packages Dependencies
+from email.policy import default
 import click
 
 #Local Packages
@@ -80,13 +81,13 @@ def check_env():
 
 @main.command('create', short_help='Create a new project of Next', options_metavar='<name> <options>')
 @click.argument('name', required=True, type=str, metavar='')
-@click.option('--build_dir', required=False, type=str, help='Select Build Dir')
-@click.option('--name_build', required=False, type=str, help='Select name of build')
+@click.option('--build_dir', required=False, type=str, help='Select Build Dir', default='build')
+@click.option('--name_build', required=False, type=str, help='Select name of build', default='app')
 @click.option('--build_system_exe', required=False, type=str, help='Select Build System executable')
 @click.option('--c_compiler', required=False, type=str, help='Select C Compiler')
 @click.option('--cxx_compiler', required=False, type=str, help='Select C++ Compiler')
 @click.option('--build_system', required=False, type=str, help='Select Build System')
-@click.option('--type_project', required=False, type=str, help='Select Type Project')
+@click.option('--type_project', required=False, type=str, help='Select Type Project', default='executable')
 def create(
     name: str, 
     build_dir: str, 
@@ -130,7 +131,7 @@ def set(property: str, value):
 def add(property: str, value):
     Config_Add.add(property, value)
     
-@main.command('exce', short_help='Excecute a coomand of Project of property <commands>')
+@main.command('exec', short_help='Excecute a coomand of Project of property <commands>')
 @click.argument('command')
 def exce(command: str):
     Exce_Next.exce(command)
