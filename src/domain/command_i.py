@@ -1,7 +1,7 @@
 from src.domain.project_t import Project_t
 from src.domain.types.status_code_t import StatusCodes, StatusCode_t
 
-class Command_t:
+class Command_i:
     def __init__(self) -> None:
         pass
 
