@@ -1,10 +1,10 @@
 ######################################################################
-# author = Rafael Zamora
-# copyright = Copyright 2020-2022, Next Project
-# date = 30/10/2022
+### author = Rafael Zamora
+### copyright = Copyright 2020-2022, Next Project
+### date = 30/10/2022
 ### license = PSF
-# version = 3.4.0
-# maintainer = Rafael Zamora
+### version = 3.4.0
+### maintainer = Rafael Zamora
 ### email = rafa.zamora.ram@gmail.com
 ### status = Production
 ######################################################################
@@ -14,15 +14,23 @@ import os
 
 
 class _TypeDir_t:
-    _type_dir = str
+    _type_dir = int
     _lable: str
 
-    def __init__(self, type_dir: str, lable: str) -> None:
+    def __init__(self, type_dir: int, lable: str) -> None:
         self._type_dir = type_dir
         self._lable = lable
 
     def __str__(self) -> str:
         return '{ ' + str(self._type_dir) + ', ' + self._lable + ' }'
+
+    def __eq__(self, __o: object) -> bool:
+        if self.type_dir() == __o.type_dir():
+            return True
+        return False
+
+    def type_dir(self) -> int: 
+        return self._type_dir
 
     def string(self) -> str:
         return 'TypeDir: ' + self._lable
@@ -60,6 +68,11 @@ class Dir_t:
     def __str__(self) -> str:
         return '{ ' + self.path() + ', ' + str(self.type_dir()) + ', ' + str(self.exist()) + ' }'
 
+    def __eq__(self, __o: object) -> bool:
+        if self.path() == __o.path():
+            return True
+        return False
+    
     def string(self) -> str:
         return 'Path: ' + self.path() + ', TypeDir: ' + str(self.type_dir()) + ', Exist: ' + str(self.exist())
 
