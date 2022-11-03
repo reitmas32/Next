@@ -79,7 +79,7 @@ class Dir_t:
     def path(self) -> str:
         return self._path
 
-    def type_dir(self) -> str:
+    def type_dir(self) -> _TypeDir_t:
         return self._type_dir
 
     def exist(self) -> bool:
