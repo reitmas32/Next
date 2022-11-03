@@ -36,3 +36,4 @@ class StatusCode_t:
 class StatusCodes_e:
     SUCCESSFUL = StatusCode_t(0, 'SUCCESSFUL')
     ERROR = StatusCode_t(-1, 'ERROR')
+    WARNING = StatusCode_t(1, 'WARNING')
