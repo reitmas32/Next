@@ -12,6 +12,7 @@
 # Packages Dependencies
 
 from src.ports.yaml.yaml_interface import yaml_interface
+from src.ports.messages.message_handler import Message_Handler as MH
 from src.domain.types.dir_t import Dir_t, TypesDirs_e
 
 # Local Packages
@@ -36,9 +37,10 @@ class Config_t:
         #Read Data and load in self._data
         if self.file_path.exist and self.file_path.type_dir() == TypesDirs_e.FILE:
             self._data = yaml_port.yaml_file_to_object(file_path=self.file_path.path())
+            MH.message_successful('Read config of: ' + dir.path() )
         else:
             #TODO: Crear el Port de Messages
-            print('La direcion: ' + self.file_path.path() + ' no existe o no es un archivo')
+            MH.message_error('The address: ' + self.file_path.path() + ' does not exist or is not a file')
         pass
 
     def get(self, property):
