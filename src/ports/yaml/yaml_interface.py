@@ -9,22 +9,23 @@
 ### status = Production
 ######################################################################
 
+from typing import Any
 from src.domain.types.null_smart_t import NullSmart_t
 
 class yaml_interface:
     def __init__(self) -> None:
         pass
 
-    def object_to_yaml_str(obj, options=NullSmart_t) -> str:
+    def object_to_yaml_str(self, obj: Any, options=None) -> str:
         pass
 
-    def yaml_string_to_object(string, options=NullSmart_t) -> object:
+    def yaml_string_to_object(self, string: str, options=None) -> object:
         pass
 
     # f->o
-    def yaml_file_to_object(file_path, options=NullSmart_t) -> object:
+    def yaml_file_to_object(self, file_path: str, options=None) -> object:
         pass
 
     # o->f
-    def object_to_yaml_file(obj, file_path, options=NullSmart_t) -> object:
+    def object_to_yaml_file(self, obj: Any, file_path: str, options=None) -> object:
         pass
