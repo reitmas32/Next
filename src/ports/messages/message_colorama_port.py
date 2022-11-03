@@ -19,7 +19,7 @@ from colorama  import Fore
 from colorama import Style
 import colorama
 
-class _message_handdler_colorama_port(message_handdler_i):
+class message_handdler_colorama_port(message_handdler_i):
 
     OUTPUT_ACTIVATED = True
 
@@ -49,5 +49,3 @@ class _message_handdler_colorama_port(message_handdler_i):
     def message_waiting(self, messageStr: str) -> StatusCode_t:
         if self.OUTPUT_ACTIVATED == True : print(f'{Fore.BLUE}{Style.BRIGHT} <<WAITING...>> {Style.RESET_ALL}' + messageStr)
         return StatusCodes_e.SUCCESSFUL
-
-Message_Handler_Colorama_Port = _message_handdler_colorama_port()
