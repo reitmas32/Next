@@ -26,8 +26,9 @@ class Config_t:
     file_path: Dir_t
     yaml = ''
     dir: Dir_t
+    global_yaml_port: yaml_interface
 
-    def __init__(self, dir: Dir_t, yaml_port: yaml_interface):
+    def __init__(self, dir: Dir_t, yaml_port: yaml_interface = NullSmart_t()):
         """Initialize a src.models.config_t
 
         Args:
@@ -40,7 +41,10 @@ class Config_t:
 
         #Read Data and load in self._data
         if self.file_path.exist and self.file_path.type_dir() == TypesDirs_e.FILE:
-            self._data = yaml_port.yaml_file_to_object(file_path=self.file_path.path())
+            if type(yaml_port) != NullSmart_t.type_is():
+                self._data = yaml_port.yaml_file_to_object(file_path=self.file_path.path())
+            else:
+                self._data = Config_t.global_yaml_port.yaml_file_to_object(file_path=self.file_path.path())
             MH.message_successful('Read config of: ' + dir.path() )
         else:
             #TODO: Crear el Port de Messages
