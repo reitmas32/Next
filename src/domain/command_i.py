@@ -18,5 +18,5 @@ class Command_i:
     def __init__(self) -> None:
         pass
 
-    def exec(project: Project_t) -> StatusCode_t:
+    def exec(self, project: Project_t) -> StatusCode_t:
         return StatusCodes_e.SUCCESSFUL
