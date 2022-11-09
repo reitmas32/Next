@@ -38,7 +38,7 @@ def countWord(text: str, separator: str = " ") -> int:
     Returns:
         int: Num Words in text
     """
-    text_list = listToStr(text, sep=separator)
+    text_list = listToStr(text, separator=separator)
     return len(text_list)
 
 
