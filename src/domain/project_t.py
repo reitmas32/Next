@@ -12,10 +12,14 @@
 from src.domain.config_t import Config_t
 from src.domain.types.dir_t import Dir_t
 
+from src.ports.yaml.yaml_ruamel import yaml_ruamel_port
+
 class Project_t:
 
     config: Config_t
     path: Dir_t
 
     def __init__(self, path: Dir_t = Dir_t('') ) -> None:
-        pass
+        self.path = path
+        self.config = Config_t(self.path, yaml_port=yaml_ruamel_port())
+        
