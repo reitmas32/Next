@@ -187,7 +187,6 @@ def build_cmake(project: Project_t, name_build: str):
     include_local = INCLUDE_TOOL.get_includes(Dir_t(this_dir))
 
     # Get the Tree
-    print('------------------')     
     tree = Tree_t(Dir_t(this_dir))
     # Get INcludes of Project and dependencies
     tree.deepTravers(_getIncludes, args = {'_list_includes': _list_includes})
