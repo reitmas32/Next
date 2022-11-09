@@ -10,6 +10,7 @@
 ######################################################################
 
 # Packages Systems
+from typing import Tuple
 from src.domain.types.status_code_t import StatusCode_t, StatusCodes_e
 
 
@@ -31,3 +32,6 @@ class message_handdler_i:
         
     def message_waiting(messageStr: str) -> StatusCode_t:
         return StatusCodes_e.SUCCESSFUL
+
+    def message_question(messageQuestion: str) -> Tuple[StatusCode_t, object]:
+        return StatusCodes_e.SUCCESSFUL, True
