@@ -11,8 +11,10 @@
 
 # Packages Systems
 import platform
+from typing import Tuple
 from src.ports.messages.message_interface import message_handdler_i
 from src.domain.types.status_code_t import StatusCode_t, StatusCodes_e
+import src.tools.string as STRING_TOOL 
 
 # Packages Dependencies
 from colorama  import Fore
@@ -49,3 +51,19 @@ class message_handdler_colorama_port(message_handdler_i):
     def message_waiting(self, messageStr: str) -> StatusCode_t:
         if self.OUTPUT_ACTIVATED == True : print(f'{Fore.BLUE}{Style.BRIGHT} <<WAITING...>> {Style.RESET_ALL}' + messageStr)
         return StatusCodes_e.SUCCESSFUL
+
+    def message_question(self, messageQuestion: str, defaultAnswer: str = '', listAnswer: list = [], printList: bool = False, printDefault: bool = False) -> Tuple[StatusCode_t, object]:
+        print(f'{Fore.MAGENTA}{Style.BRIGHT} <<QUESTION>> {Style.RESET_ALL}' + messageQuestion, end=' ')
+        if printDefault:
+            print('[' + defaultAnswer + '] ', end='')
+        if len(listAnswer) > 0 and printList:
+            print(' > {' + STRING_TOOL.listToStr(listAnswer, ' ') + '}', end='')
+        temporal_defaultAnswer = input()
+        if temporal_defaultAnswer != '':
+            defaultAnswer = temporal_defaultAnswer
+
+        if len(listAnswer) > 0:
+            if not temporal_defaultAnswer in listAnswer and defaultAnswer == '':
+                self.message_error('It\'s not in the options: ' + STRING_TOOL.listToStr(listAnswer, ', '))
+                return StatusCodes_e.ERROR, ''
+        return StatusCodes_e.SUCCESSFUL, defaultAnswer
