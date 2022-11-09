@@ -33,7 +33,6 @@ Available commands:
 """
 
 from src.domain.command_i import Command_i
-from src.domain.project_t import Project_t
 from src.domain.types.status_code_t import StatusCodes_e
 
 class InfoCommand_t(Command_i):
@@ -41,6 +40,6 @@ class InfoCommand_t(Command_i):
     def __init__(self) -> None:
         super().__init__()
 
-    def exec(self, project: Project_t):
+    def exec(self):
         print(_info_string)
         return StatusCodes_e.SUCCESSFUL
