@@ -17,6 +17,8 @@ from src.ports.messages.message_handler import Message_Handler as MH
 import src.tools.include as INCLUDE_TOOL
 import src.tools.library as LIBRARY_TOOL
 
+
+#TODO: Ducumentar la classe por lo demas se ve bien
 class Dependencie_t:
     name: str
     dir: Dir_t
