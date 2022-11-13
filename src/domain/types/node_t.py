@@ -12,7 +12,7 @@
 from typing import Generic, TypeVar
 
 T = TypeVar('T')
-
+#TODO: Documentar la clase
 class Node_t(Generic[T]):
     
     data = None
