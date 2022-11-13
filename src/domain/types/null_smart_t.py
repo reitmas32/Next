@@ -12,6 +12,9 @@
 class NullSmart_t:
     def __init__(self) -> None:
         pass
+
+    def __str__(self) -> str:
+        return 'NullSmart_t'
     
     def type_is() -> type:
         """Retrurn Type of NullSmart_t
