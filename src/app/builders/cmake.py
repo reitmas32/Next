@@ -179,7 +179,7 @@ def build_cmake(project: Project_t, name_build: str):
     # Into in the directory of build
     os.chdir(build_dir)
     # Mkdir build_dir
-    OS_TOOL.mkdirDir(build_name)
+    OS_TOOL.mkdirDir(Dir_t(build_name))
     #os.mkdir(self.build_name)
     os.chdir(build_name)
 
