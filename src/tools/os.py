@@ -10,20 +10,22 @@
 ######################################################################
 
 from src.ports.messages.message_handler import Message_Handler as MH
+from src.domain.types.dir_t import Dir_t
 import os
 
-def mkdirDir(dir:str):
+def mkdirDir(dir:Dir_t):
     
     try:
         # Try create build_dir
-        os.mkdir(dir)
+        os.mkdir(dir.path())
         
         # Message(Successful): The dir directory was created
-        MH.message_successful('MKDIR : ' + dir)
+        MH.message_successful('MKDIR : ' + dir.path())
         
-    except:
+    except Exception as e:
         # Message(Waiting): The dir folder already exists
-        MH.message_warning("Warning " + dir +  " folder already exists")
+
+        MH.message_warning("Warning " + str(dir) +  " folder already exists -> " + str(e))
                 
 def find_files_for_ext(dir: str, ext = '.py'):
     files_with_ext = []
