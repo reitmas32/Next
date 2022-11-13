@@ -12,7 +12,8 @@
 # System Packages
 import os
 
-
+from src.ports.messages.message_handler import Message_Handler as MH
+#TODO: Documetar las calse y la enum 
 class _TypeDir_t:
     _type_dir = int
     _lable: str
@@ -49,21 +50,24 @@ class Dir_t:
     _exists: bool = False
 
     def __init__(self, path: str) -> None:
-        self._path = path
-        if os.path.exists(self._path):
-            self._exists = True
+        try: 
+            self._path = path
+            if os.path.exists(self._path):
+                self._exists = True
 
-            if os.path.isdir(self.path()):
-                self._type_dir = TypesDirs_e.DIR
+                if os.path.isdir(self.path()):
+                    self._type_dir = TypesDirs_e.DIR
 
-            if os.path.isfile(self.path()):
-                self._type_dir = TypesDirs_e.FILE
+                if os.path.isfile(self.path()):
+                    self._type_dir = TypesDirs_e.FILE
 
-            if os.path.islink(self.path()):
-                self._type_dir = TypesDirs_e.LINK
-        else:
-            self._exists = False
-            self._type_dir = TypesDirs_e.NONE
+                if os.path.islink(self.path()):
+                    self._type_dir = TypesDirs_e.LINK
+            else:
+                self._exists = False
+                self._type_dir = TypesDirs_e.NONE
+        except Exception as e:
+            MH.message_error( str(e))
 
     def __str__(self) -> str:
         return '{ ' + self.path() + ', ' + str(self.type_dir()) + ', ' + str(self.exist()) + ' }'
