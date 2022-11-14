@@ -2,12 +2,13 @@ bin/
 lib/
 lib64
 lib64/
-.vscode
+.vscode/
 obj/
 build/
 doc/
 documentation/
 dist/
+src-old/
 *.egg-info
 
 __pycache__/
