@@ -175,13 +175,13 @@ def build_cmake(project: Project_t, name_build: str):
     build_name = config_obj.get("build_name")
     this_dir = project.path.path()
 
-
+    OS_TOOL.mkdirDir(Dir_t(build_dir))
     # Into in the directory of build
     os.chdir(build_dir)
     # Mkdir build_dir
-    OS_TOOL.mkdirDir(Dir_t(build_name))
+    OS_TOOL.mkdirDir(Dir_t(name_build))
     #os.mkdir(self.build_name)
-    os.chdir(build_name)
+    os.chdir(name_build)
 
     # Get the include local
     include_local = INCLUDE_TOOL.get_includes(Dir_t(this_dir))
