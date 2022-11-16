@@ -20,7 +20,6 @@ from src.domain.types.status_code_t import StatusCodes_e
 from src.domain.types.dir_t import Dir_t
 from src.domain.types.null_smart_t import NullSmart_t
 
-from src.app.commands.set_command_t import SetCommand_t
 
 # Packages Dependencies
 #TODO: Hcer port de esto

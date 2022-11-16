@@ -9,13 +9,10 @@
 ### status = Production
 ######################################################################
 
-import os
-import shutil
 
 from src.domain.project_t import Project_t
 from src.domain.command_i import Command_i
 from src.app.funcs.print_tree import printTree
-from src.domain.types.dir_t import Dir_t
 from src.ports.messages.message_handler import Message_Handler as MH
 from src.domain.types.status_code_t import StatusCodes_e
 

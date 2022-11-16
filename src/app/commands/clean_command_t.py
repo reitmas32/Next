@@ -9,7 +9,6 @@
 ### status = Production
 ######################################################################
 
-import os
 import shutil
 
 from src.domain.command_i import Command_i

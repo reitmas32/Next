@@ -10,7 +10,6 @@
 ######################################################################
 
 import os
-import shutil
 
 from src.domain.command_i import Command_i
 from src.ports.messages.message_handler import Message_Handler as MH

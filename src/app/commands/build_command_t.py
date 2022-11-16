@@ -10,7 +10,6 @@
 ######################################################################
 
 import os
-import shutil
 
 from src.domain.command_i import Command_i
 from src.domain.project_t import Project_t

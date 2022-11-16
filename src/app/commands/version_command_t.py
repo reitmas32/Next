@@ -13,7 +13,6 @@
 VERSION = "3.4.0"
 
 #System Packages
-import os
 
 #Local Packages
 from src.ports.messages.message_handler import Message_Handler as MH

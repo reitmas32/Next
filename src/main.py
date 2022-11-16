@@ -12,6 +12,8 @@
 # Packages Dependencies
 import click
 
+#Tools
+
 #Types
 from src.domain.config_t import Config_t
 from src.domain.types.dir_t import Dir_t
@@ -19,7 +21,6 @@ from src.domain.project_t import Project_t
 from src.app.commands.get_command_t import GetCommand_t
 from src.app.commands.set_command_t import SetCommand_t
 from src.app.commands.add_command_t import AddCommand_t
-from src.app.funcs.print_tree import printTree
 
 #Commands
 from src.app.commands.build_command_t import BuildCommand_t
