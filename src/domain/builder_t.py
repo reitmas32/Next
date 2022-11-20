@@ -9,17 +9,13 @@
 ### status = Production
 ######################################################################
 
-from src.domain.types.null_smart_t import NullSmart_t
-from src.domain.config_t import Config_t
+from src.domain.project_t import Project_t
 from src.domain.types.dir_t import Dir_t
-from src.ports.messages.message_handler import Message_Handler as MH
+from src.domain.types.status_code_t import StatusCode_t, StatusCodes_e
 
-class Build_i:
-    config_obj: Config_t  = NullSmart_t()
-    this_dir = ""
-    build_name = ""
+class Builder_i:
 
-    def __init__(self, build_name: str, config_obj: Config_t, this_dir: Dir_t):
+    def __init__(self):
         """Initialize a src.models.Build_t
 
         Args:
@@ -27,15 +23,40 @@ class Build_i:
             config_obj (Config_t)
             this_dir (Dir_t)
         """
-        
-        # Save the config_obj
-        self.config_obj = config_obj
-        
-        # The directory
-        self.this_dir = this_dir
+        pass
 
-        # The Name of Build
-        self.build_name = build_name
+    def create_project(
+        self, 
+        next_dir:Dir_t, 
+        this_dir:Dir_t,
+        name_project:str
+    )-> StatusCode_t:
+        pass
+
+    def create_project_api(
+        self, 
+        next_dir:Dir_t, 
+        this_dir:Dir_t,
+        name_project:str,
+        data: dict
+    )-> StatusCode_t:
+        pass
+
+    def create(
+        self, 
+        project: Project_t,
+    )-> StatusCode_t:
+        pass
+
+    def create_api(
+        self, 
+        project: Project_t,
+        data: dict
+    )-> StatusCode_t:
+        pass
                 
-    def build(self):
+    def build(self, project: Project_t, name_build: str)-> StatusCode_t:
+        pass
+
+    def build_api(self, project: Project_t, name_build: str)-> StatusCode_t:
         pass
