@@ -40,8 +40,8 @@ class BuildCommand_t(Command_i):
             try:
                 #TODO: this is the most insecure thing i have ever done repair asap
                 base_build = self.project.config.get('builds')[name_build]['base']
-                build_func = base_builders[base_build]['build']
-                build_func(project=self.project, name_build=name_build)
+                builder = base_builders[base_build]
+                builder.build(project=self.project, name_build=name_build)
             except Exception as e:
                 MH.message_error('Base Project Undefind in build_command')
                 print(e)  
