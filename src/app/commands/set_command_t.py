@@ -38,7 +38,7 @@ class SetCommand_t(Command_i):
             #If it was added correctly
             if(type(value_of_property) != NullSmart_t.type_is()):
 
-                #TODO:Write Config
+                #Write Config
                 self.project.write_config()
                 
                 # Message(Successful): Getting property
