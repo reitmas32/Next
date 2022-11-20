@@ -10,6 +10,7 @@
 ######################################################################
 
 import os
+from src.domain.types.dir_t import Dir_t
 
 from src.domain.command_i import Command_i
 from src.ports.messages.message_handler import Message_Handler as MH
@@ -35,8 +36,8 @@ class CreateCommand_t(Command_i):
             MH.message_info('NEXT_DIR in: ' + next_dir)
 
             try:
-                create_func = base_builders[base_build]['create']
-                create_func(next_dir=next_dir, this_dir=this_dir, name_project= name_project)
+                builder = base_builders[base_build]
+                builder.create_project(next_dir=Dir_t(next_dir), this_dir=Dir_t(this_dir), name_project= name_project)
             except Exception as e:
                 MH.message_error('Base Project Undefind')
                 print(e)
