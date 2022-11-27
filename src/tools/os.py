@@ -26,6 +26,20 @@ def mkdirDir(dir:Dir_t):
         # Message(Waiting): The dir folder already exists
 
         MH.message_warning("Warning " + str(dir) +  " folder already exists -> " + str(e))
+
+def makeDirs(dir:Dir_t):
+    
+    try:
+        # Try create build_dir
+        os.makedirs(dir.path())
+        
+        # Message(Successful): The dir directory was created
+        MH.message_successful('MKDIR : ' + dir.path())
+        
+    except Exception as e:
+        # Message(Waiting): The dir folder already exists
+
+        MH.message_warning("Warning " + str(dir) +  " folder already exists -> " + str(e))
                 
 def find_files_for_ext(dir: str, ext = '.py'):
     files_with_ext = []
