@@ -2,7 +2,7 @@
 import os
 import shutil
 import stat
-import command
+import platform
 
 
 from src.domain.project_t import Project_t
@@ -22,7 +22,19 @@ import src.tools.include as INCLUDE_TOOL
 import src.tools.string as STRING_TOOL
 import src.tools.os as OS_TOOL
 
-import bash
+# Open script of bash
+SYSTEM = platform.system()
+
+
+_COMMENTS_CHAR = '#'
+_FILE_BASIC_BUILD_SH = 'basic_build.sh'
+_SLASH_CHAR = '/'
+
+if SYSTEM != 'Linux':
+    _COMMENTS_CHAR = '::'
+    _FILE_BASIC_BUILD_SH = 'basic_build.bat'
+    _SLASH_CHAR = '\\'
+
 
 _list_includes = []
 _list_libraries = []
@@ -33,6 +45,7 @@ def _getIncludes(dependencie: Dependencie_t, num_deep: int , args:dict):
     
 def _getLibraries(dependencie: Dependencie_t, num_deep: int , args:dict):
     if dependencie.library != '':
+        print('Hola')
         args['_list_libraries'].append(dependencie.library)
 
 class Basic_t(Builder_i):
@@ -98,13 +111,17 @@ class Basic_t(Builder_i):
         dir: str, 
         build_dir: str,
         builder_name: str,
+        type_project: str,
         name_out: str,
         c_compiler: str, 
         cxx_compiler: str,
         linker: str,
+        ar: str,
         c_compiler_regex: str,
         cxx_compiler_regex: str,
         linker_regex: str,
+        static_linker_regex: str,
+        dynamic_linker_regex: str,
         include_dirs: list,
         libs: list,
         c_source: list,
@@ -132,7 +149,7 @@ class Basic_t(Builder_i):
                 line_compile = line_compile.replace(compiler_hash, compiler)
                 
                 # Create path of output file
-                path_file_out = dir + '/' + build_dir + '/' + builder_name + file.replace(dir, '') + '.o'
+                path_file_out = dir + _SLASH_CHAR + build_dir + _SLASH_CHAR + builder_name + file.replace(dir, '') + '.o'
                 
                 # Remove extension of source code example: main.cpp.o -> main.o
                 for ext in extension_files:
@@ -145,6 +162,11 @@ class Basic_t(Builder_i):
                 # Add Include dirs
                 for i in include_dirs:
                     line_compile += ' -I' + i
+                
+                if SYSTEM != 'Linux':
+                    line_compile = line_compile.replace('/', '\\')
+                    path_file_out = path_file_out.replace('/', '\\')
+
                 
                 # Apped dict of data in compile_lines
                 compile_lines.append(
@@ -172,11 +194,18 @@ class Basic_t(Builder_i):
             compiler_regex  = c_compiler_regex
             )
             
+
         # Add linker
-        linker_line = linker_regex
         
-        linker_line = linker_line.replace('$LD', linker)
-        
+        if type_project == 'executable':
+            linker_line = linker_regex
+            linker_line = linker_line.replace('$LD', linker)
+        elif type_project == 'static_library':
+            linker_line = static_linker_regex
+            linker_line = linker_line.replace('$AR', ar)
+        elif type_project == 'dynamic_library':
+            linker_line = dynamic_linker_regex
+            linker_line = linker_line.replace('$LD', linker)
         #Add Filer out
         linker_line = linker_line.replace(
             '$FILES', 
@@ -184,17 +213,20 @@ class Basic_t(Builder_i):
         
         #Add final file
         linker_line = linker_line.replace('$FILE_OUT', name_out)
-        
-        # Add Include dirs
-        for i in include_dirs:
-            linker_line += ' -I' + i
+        if type_project == 'executable':
+            # Add Include dirs
+            for i in include_dirs:
+                linker_line += ' -I' + i
             
-        # Add Libraries 
-        for lib in libs:
-            linker_line += ' ' + lib
+            # Add Libraries 
+            for lib in libs:
+                linker_line += ' ' + lib
             
         # Open script of bash
-        f = open( 'basic_build.sh', 'w')
+        if SYSTEM != 'Linux':
+            f = open( 'basic_build.bat', 'w')
+        else:
+            f = open( 'basic_build.sh', 'w')
             
         # Write lines to compile
         for file in cxx_compile_lines + c_compile_lines:
@@ -204,14 +236,14 @@ class Basic_t(Builder_i):
             OS_TOOL.mkdirDir(file['path_file_out'][:index_dirs_of_file])
             
             # Write Message
-            f.write( '#Generate: ' + file['path_file_out'] + '\n')
+            f.write( _COMMENTS_CHAR + 'Generate: ' + file['path_file_out'] + '\n')
             
             # Write line to compile
             f.write(file['line_compile'] + '\n\n')
             
         
         # Write Message 
-        f.write( '#Generate: ' + name_out + '\n')
+        f.write( _COMMENTS_CHAR + 'Generate: ' + name_out + '\n')
         
         # Write linker line
         f.write( linker_line + '\n')
@@ -219,11 +251,16 @@ class Basic_t(Builder_i):
         f.close()
         
         # Change permise of file
-        st = os.stat( 'basic_build.sh')
-        os.chmod( 'basic_build.sh', st.st_mode | stat.S_IEXEC)
+        if SYSTEM != 'Windows':
+            st = os.stat( 'basic_build.sh')
+            os.chmod( 'basic_build.sh', st.st_mode | stat.S_IEXEC)
+            # Run script
+            os.system('bash -x ' + dir + '/' + build_dir + '/' + builder_name + '/' + 'basic_build.sh' )
+        else:
+            os.system( dir + _SLASH_CHAR + build_dir + _SLASH_CHAR + builder_name + _SLASH_CHAR + 'basic_build.bat' )
+
         
-        # Run script
-        os.system('bash -x ' + dir + '/' + build_dir + '/' + builder_name + '/' + 'basic_build.sh', )
+        
         return
     
     
@@ -262,7 +299,7 @@ class Basic_t(Builder_i):
             if s.find('*') == -1:
                 
                 # Create full path
-                s_file_path = self.this_dir + '/' + s
+                s_file_path = self.this_dir + _SLASH_CHAR + s
                 
                 # Check if s_file_path is a FIle and exists
                 if os.path.isfile(s_file_path):
@@ -286,7 +323,7 @@ class Basic_t(Builder_i):
                 s = s[:index_str_recursive]
                 
                 # Create full path of Dir
-                s_dir_path = self.this_dir + '/' + s
+                s_dir_path = self.this_dir + _SLASH_CHAR + s
                 
                 #Apped files with extension
                 source_list += OS_TOOL.find_files_for_ext(dir=s_dir_path,ext=extension_files)
@@ -297,10 +334,16 @@ class Basic_t(Builder_i):
         for s in source:
             s = s[::-1]
             for i in range(len(s)):
-                if s[i] == '/':
+                if s[i] == _SLASH_CHAR:
                     new_s = s[i:-1]
-                    new_s = '/' + new_s[::-1]
-                    new_s = self.this_dir + '/' + build_dir + '/' + self.build_name + new_s.replace(self.this_dir, '')
+                    if SYSTEM != 'Linux':
+                        new_s = new_s[:-1]
+                    print(new_s)
+                    new_s = _SLASH_CHAR + new_s[::-1]
+                    if SYSTEM != 'Linux':
+                        new_s = self.this_dir + _SLASH_CHAR + build_dir + _SLASH_CHAR + self.build_name + new_s.replace(self.this_dir[2:], '')
+                    else:
+                        new_s = self.this_dir + _SLASH_CHAR + build_dir + _SLASH_CHAR + self.build_name + new_s.replace(self.this_dir, '')
                     OS_TOOL.makeDirs(Dir_t(new_s))
                     break
     
@@ -332,10 +375,11 @@ class Basic_t(Builder_i):
         tree = Tree_t(Dir_t(self.this_dir))
         # Get Includes of Project and dependencies
         tree.deepTravers(_getIncludes, args = {'_list_includes': _list_includes})
-        
+
         # Get libs and dependencies
         tree.deepTravers(_getLibraries, args = {'_list_libraries': _list_libraries})
 
+        print(_list_libraries)
         # Desactivate the output
         # TODO: esta linea debe cambiarse a MH.output_deactivate() y su contraria MH.output_activate()
         # para evitar que MH.OUTPUT_ACTIVATED se asigne aun tipo no bool
@@ -344,7 +388,68 @@ class Basic_t(Builder_i):
         sourceCXX = self._getSource('source_cxx')
         sourceC = self._getSource('source_c')
 
-        self.makeDirs_of_source(source=sourceCXX+sourceC, build_dir=self.config_obj.get("build_dir"))
+        sourceAll = sourceCXX + sourceC
+
+        if SYSTEM != 'Linux':
+            for i in range(len(sourceAll)):
+                sourceAll[i] = sourceAll[i].replace('/', _SLASH_CHAR)
+
+        self.makeDirs_of_source(source=sourceAll, build_dir=self.config_obj.get("build_dir"))
+
+        type_project = self.config_obj.get('type_project')
+        defaul_c_compiler_regex = ''
+        defaul_cxx_compiler_regex = ''
+        c_compiler = self.config_build.get("c_compiler")           if self.config_build.get("c_compiler")          != None else 'gcc'
+        cxx_compiler = self.config_build.get("cxx_compiler")       if self.config_build.get("cxx_compiler")        != None else 'g++'
+        linker = self.config_build.get("linker")                   if self.config_build.get("linker")              != None else 'g++'
+        ar = self.config_build.get("ar")                           if self.config_build.get("ar")                  != None else 'ar'
+        linker_regex = self.config_build.get("linker_regex")         if self.config_build.get("linker_regex")        != None else '$LD $FILES -o $FILE_OUT'
+        static_linker_regex = self.config_build.get("static_linker_regex")  if self.config_build.get("static_linker_regex") != None else '$AR rcs $FILE_OUT $FILES'
+        dynamic_linker_regex = self.config_build.get("dynamic_linker_regex") if self.config_build.get("dynamic_linker_regex")!= None else '$LD $FILES -shared -o $FILE_OUT'
+        include_dirs = list(set(include_local + _list_includes))
+        libs = list(set(_list_libraries))
+
+        if self.config_build.get("type_build") != None:
+            type_project = self.config_build.get("type_build")
+
+
+        if self.config_build.get("c_compiler_regex") != None:
+            defaul_c_compiler_regex = self.config_build.get("c_compiler_regex")
+
+        if self.config_build.get("cxx_compiler_regex") != None:
+            defaul_cxx_compiler_regex = self.config_build.get("cxx_compiler_regex")
+        
+        if type_project == 'dynamic_library': 
+            if defaul_c_compiler_regex      ==   '': defaul_c_compiler_regex    = '$C -fPIC -c $FILE -o $FILE_OUT'
+            if defaul_cxx_compiler_regex    ==   '': defaul_cxx_compiler_regex  = '$CXX -fPIC -c $FILE -o $FILE_OUT'
+        elif type_project == 'static_library':
+            if defaul_c_compiler_regex      ==   '': defaul_c_compiler_regex    = '$C -c $FILE -o $FILE_OUT'
+            if defaul_cxx_compiler_regex    ==   '': defaul_cxx_compiler_regex  = '$CXX -c $FILE -o $FILE_OUT'
+        else:
+            if defaul_c_compiler_regex      ==   '': defaul_c_compiler_regex    = '$C -c $FILE -o $FILE_OUT'
+            if defaul_cxx_compiler_regex    ==   '': defaul_cxx_compiler_regex  = '$CXX -c $FILE -o $FILE_OUT'
+
+        MH.message_waiting('Build Project')        
+        print('     Dir            -> ' + self.this_dir)
+        print('     BuilderName    -> ' + self.build_name)
+        print('     NameOut        -> ' + self.config_build.get("name_out"))
+        print('     BuildDir       -> ' + self.config_obj.get('build_dir'))
+        print('     TypeProject    -> ' + type_project)
+        print('     C Compiler     -> ' + c_compiler)
+        print('     C++ Compiler   -> ' + cxx_compiler)
+        print('     Linker         -> ' + linker)
+        print('     AR Linker      -> ' + ar)
+        print('     Dynamic Linker -> ' + linker)
+        print('     C Regex        -> ' + defaul_c_compiler_regex)
+        print('     C++ Regex      -> ' + defaul_cxx_compiler_regex)
+        print('     Linker Regex   -> ' + linker_regex)
+        print('     Static Regex   -> ' + static_linker_regex)
+        print('     Dynamic Regex  -> ' + dynamic_linker_regex)
+        print('     Includes:')
+        STRING_TOOL.printList(include_dirs, pre = '       - ')
+        print('     Libs:')
+        STRING_TOOL.printList(libs, pre = '       - ')
+
         
         # create command of Basic
         Basic_t._generateCommand(
@@ -352,17 +457,21 @@ class Basic_t(Builder_i):
                 builder_name        = self.build_name,
                 name_out            = self.config_build.get("name_out")           if self.config_build.get("name_out")          != None else self.build_name,
                 build_dir           = self.config_obj.get('build_dir'),
-                c_compiler          = self.config_build.get("c_compiler")           if self.config_build.get("c_compiler")          != None else 'gcc',
-                cxx_compiler        = self.config_build.get("cxx_compiler")         if self.config_build.get("cxx_compiler")        != None else 'g++',
-                linker              = self.config_build.get("linker")               if self.config_build.get("linker")              != None else 'g++',
-                c_compiler_regex    = self.config_build.get("c_compiler_regex")     if self.config_build.get("c_compiler_regex")    != None else '$C -c $FILE -o $FILE_OUT',
-                cxx_compiler_regex  = self.config_build.get("cxx_compiler_regex")   if self.config_build.get("cxx_compiler_regex")  != None else '$CXX -c $FILE -o $FILE_OUT',
-                linker_regex        = self.config_build.get("linker_regex")         if self.config_build.get("linker_regex")        != None else '$LD $FILES -o $FILE_OUT',
+                type_project        = type_project,
+                c_compiler          = c_compiler,
+                cxx_compiler        = cxx_compiler,
+                linker              = linker,
+                ar                  = self.config_build.get("ar")                   if self.config_build.get("ar")                  != None else 'ar',
+                c_compiler_regex    = defaul_c_compiler_regex,
+                cxx_compiler_regex  = defaul_cxx_compiler_regex,
+                linker_regex        = linker_regex,
+                static_linker_regex = static_linker_regex,
+                dynamic_linker_regex= dynamic_linker_regex,
                 extension_files     = self.config_build.get("extension_files")      if self.config_build.get("extension_files" )    != None else ['.c', '.cc', '.cpp'],
                 c_source            = sourceC,
                 cxx_source          = sourceCXX,
-                include_dirs        = list(set(include_local + _list_includes)),
-                libs                = list(set(_list_libraries)),
+                include_dirs        = include_dirs,
+                libs                = libs,
             )
 
         MH.OUTPUT_ACTIVATED = True
