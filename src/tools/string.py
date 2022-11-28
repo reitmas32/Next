@@ -58,3 +58,7 @@ def listToStr(list: list, separator: str = NullSmart_t) -> str:
         if separator:
             str1 += separator
     return str1
+
+def printList(list: list, pre: str = '- ', post: str = '') -> None:
+    for i in list:
+        print(pre + i + post)
