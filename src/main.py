@@ -31,6 +31,7 @@ from src.app.commands.clean_command_t import CleanCommand_t
 from src.app.commands.export_command_t import ExportCommand_t
 from src.app.commands.import_command_t import ImportCommand_t
 from src.app.commands.tree_command_t import TreeCommand_t
+from src.app.commands.doctor_command_t import DoctorCommand_t
 
 #Ports
 from src.ports.yaml.yaml_ruamel import yaml_ruamel_port
@@ -155,3 +156,8 @@ def tree():
 def export(library):
     e = ExportCommand_t(project=Project_t(Dir_t(THIS_DIR)))
     e.exec(library)
+
+@main.command('doctor', short_help='view doctor the Next')
+def doctor():
+    v = DoctorCommand_t()
+    v.exec()
