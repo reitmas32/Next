@@ -10,6 +10,7 @@ documentation/
 dist/
 src-old/
 *.egg-info
+venv/
 
 __pycache__/
 src/models/__pycache__/
