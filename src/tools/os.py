@@ -52,3 +52,21 @@ def find_files_for_ext(dir: str, ext = '.py'):
     
     # Return files
     return files_with_ext
+
+def find_script_on_path(script_tag: str, full_path=False, _start = True, _max_results=10, _equal = False) -> list[str]:
+    match_scripts = []
+    for dir in os.environ['PATH'].split(':'):
+        for script in os.listdir(dir):
+            if len(match_scripts) >= _max_results:
+                return match_scripts
+            if _equal:
+                if script_tag == script:
+                    match_scripts.append(f"{dir}/{script}") if full_path else match_scripts.append(f"{script}")
+            else:
+                if script.find(script_tag) != -1:
+                    if _start:
+                        if script.find(script_tag) == 0:
+                            match_scripts.append(f"{dir}/{script}") if full_path else match_scripts.append(f"{script}")
+                    else:
+                        match_scripts.append(f"{dir}/{script}") if full_path else match_scripts.append(f"{script}")
+    return match_scripts
