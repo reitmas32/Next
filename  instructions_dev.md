@@ -1,5 +1,13 @@
 # Next for Development
 
+### **Create NEXT_PACKAGES_DIR and NEXT_DIR**
+```bash
+cd $HOME
+mkdir Next_Packages
+export NEXT_PACKAGES_DIR=$HOME/Next_Packages
+export NEXT_DIR=$HOME/git/Next
+```
+
 ### **Create Env**
 ```bash
 mkdir venv
