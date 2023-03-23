@@ -32,6 +32,7 @@ from src.app.commands.export_command_t import ExportCommand_t
 from src.app.commands.import_command_t import ImportCommand_t
 from src.app.commands.tree_command_t import TreeCommand_t
 from src.app.commands.doctor_command_t import DoctorCommand_t
+from src.app.commands.install_command_t import InstallCommand_t
 
 #Ports
 from src.ports.yaml.yaml_ruamel import yaml_ruamel_port
@@ -161,3 +162,10 @@ def export(library):
 def doctor():
     v = DoctorCommand_t()
     v.exec()
+    
+@main.command('install', short_help='Install Package Using Git')
+@click.argument('url')
+@click.argument('name_packages')
+def install(url, name_packages):
+    v = InstallCommand_t()
+    v.exec(url, name_packages)
