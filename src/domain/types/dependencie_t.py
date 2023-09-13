@@ -31,13 +31,14 @@ class Dependencie_t:
         self.dir = ''
         self.date = ''
         self.num_deep = num_deep
-        for x in data.keys():
-            if x == 'name':
-                self.name = data['name']
-            elif x == 'dir':
-                self.dir = Dir_t(data['dir'])
-            elif x == 'date':
-                self.date = data['date']
+        print(data)
+        #for x in data.keys():
+        #    if x == 'name':
+        #        self.name = data['name']
+        #    elif x == 'dir':
+        #        self.dir = Dir_t(data['dir'])
+        #    elif x == 'date':
+        #        self.date = data['date']
         
         self.includes = INCLUDE_TOOL.get_includes(self.dir)
         self.library = LIBRARY_TOOL.get_library(self.dir)
