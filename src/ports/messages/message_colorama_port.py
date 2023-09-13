@@ -35,6 +35,10 @@ class message_handdler_colorama_port(message_handdler_i):
     def message_error(self, messageStr: str) -> StatusCode_t:
         print(f'{Fore.RED}{Style.BRIGHT} <<ERROR>> {Style.RESET_ALL}' + messageStr)
         return StatusCodes_e.ERROR
+    
+    def message_unknown(self, messageStr: str) -> StatusCode_t:
+        print(f'{Fore.CYAN}{Style.BRIGHT} <<UNKNOWN>> {Style.RESET_ALL}' + messageStr)
+        return StatusCodes_e.ERROR
         
     def message_warning(self, messageStr: str) -> StatusCode_t:
         if self.OUTPUT_ACTIVATED == True : print(f'{Fore.YELLOW}{Style.BRIGHT} <<WARNING>> {Style.RESET_ALL}' + messageStr)

@@ -35,3 +35,6 @@ class message_handdler_i:
 
     def message_question(messageQuestion: str) -> Tuple[StatusCode_t, object]:
         return StatusCodes_e.SUCCESSFUL, True
+    
+    def message_unknown(messageStr: str) -> StatusCode_t:
+        return StatusCodes_e.ERROR

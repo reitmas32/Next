@@ -43,6 +43,7 @@ class Config_t:
         if self.file_path.exist and self.file_path.type_dir() == TypesDirs_e.FILE:
             if type(yaml_port) != NullSmart_t.type_is():
                 self._data = yaml_port.yaml_file_to_object(file_path=self.file_path.path())
+                self.validate_yaml()
             else:
                 self._data = Config_t.global_yaml_port.yaml_file_to_object(file_path=self.file_path.path())
             MH.message_successful('Read config of: ' + dir.path() )
@@ -111,3 +112,27 @@ class Config_t:
             Map: Map of Data
         """
         return self._data
+    
+    def validate_yaml(self):
+        exit_flag = False
+        if 'name_project' not in self._data:
+            MH.message_unknown(f'Not find property \'name_project\' of type \'str\' in {self.file_path.path()}')
+            exit_flag = True
+        if 'type_project' not in self._data:
+            MH.message_unknown(f'Not find property \'type_project\' of type \'str\' in {self.file_path.path()}')
+            exit_flag = True
+
+        if 'build_dir' not in self._data:
+            MH.message_unknown(f'Not find property \'build_dir\' of type \'str\' in {self.file_path.path()}')
+            exit_flag = True
+
+        if 'include_dirs' not in self._data:
+            MH.message_unknown(f'Not find property \'include_dirs\' of type \'list\' in {self.file_path.path()}')
+            exit_flag = True
+
+        if 'builds' not in self._data:
+            MH.message_unknown(f'Not find property \'builds\' of type \'dict\' in {self.file_path.path()}')
+            exit_flag = True
+
+        if exit_flag:
+            exit()

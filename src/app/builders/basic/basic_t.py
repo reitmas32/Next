@@ -338,7 +338,6 @@ class Basic_t(Builder_i):
                     new_s = s[i:-1]
                     if SYSTEM != 'Linux':
                         new_s = new_s[:-1]
-                    print(new_s)
                     new_s = _SLASH_CHAR + new_s[::-1]
                     if SYSTEM != 'Linux':
                         new_s = self.this_dir + _SLASH_CHAR + build_dir + _SLASH_CHAR + self.build_name + new_s.replace(self.this_dir[2:], '')
@@ -374,12 +373,12 @@ class Basic_t(Builder_i):
         # Get the Tree
         tree = Tree_t(Dir_t(self.this_dir))
         # Get Includes of Project and dependencies
-        tree.deepTravers(_getIncludes, args = {'_list_includes': _list_includes})
+        #tree.deepTravers(_getIncludes, args = {'_list_includes': _list_includes})
 
         # Get libs and dependencies
-        tree.deepTravers(_getLibraries, args = {'_list_libraries': _list_libraries})
+        #tree.deepTravers(_getLibraries, args = {'_list_libraries': _list_libraries})
 
-        print(_list_libraries)
+        #print(_list_libraries)
         # Desactivate the output
         # TODO: esta linea debe cambiarse a MH.output_deactivate() y su contraria MH.output_activate()
         # para evitar que MH.OUTPUT_ACTIVATED se asigne aun tipo no bool
@@ -432,7 +431,7 @@ class Basic_t(Builder_i):
         MH.message_waiting('Build Project')        
         print('     Dir            -> ' + self.this_dir)
         print('     BuilderName    -> ' + self.build_name)
-        print('     NameOut        -> ' + self.config_build.get("name_out"))
+        print('     NameOut        -> ' + self.config_build.get("name_out")           if self.config_build.get("name_out")          != None else self.build_name)
         print('     BuildDir       -> ' + self.config_obj.get('build_dir'))
         print('     TypeProject    -> ' + type_project)
         print('     C Compiler     -> ' + c_compiler)
@@ -475,3 +474,21 @@ class Basic_t(Builder_i):
             )
 
         MH.OUTPUT_ACTIVATED = True
+
+    def validate_build(self, project: Project_t, name_build: str):
+        self.config_obj = project.config
+
+        self.config_build = self.config_obj.get('builds')[name_build]
+
+        exit_flag = False
+
+        if 'name_out' not in self.config_build:
+            MH.message_unknown(f'Not find property \'name_out\' of type \'str\' in Build: {name_build}')
+            exit_flag = True
+        if 'source_cxx' not in self.config_build:
+            MH.message_unknown(f'Not find property \'source_cxx\' of type \'list\' in Build: {name_build}')
+        if 'source_c' not in self.config_build:
+            MH.message_unknown(f'Not find property \'source_c\' of type \'list\' in Build: {name_build}')
+
+        if exit_flag:
+            exit()
