@@ -4,17 +4,18 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 
+	"github.com/reitmas32/Next/src/validators"
 	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Name        string `yaml:"name"`
-	Version     string `yaml:"version"`
-	Description string `yaml:"description"`
-	TypeProject string `yaml:"type_project"`
-	BuildDir    string `yaml:"build_dir"`
+	Name         string                 `yaml:"name"`
+	Version      string                 `yaml:"version"`
+	Description  string                 `yaml:"description"`
+	TypeProject  string                 `yaml:"type_project"`
+	BuildDir     string                 `yaml:"build_dir"`
+	Dependencies map[string]Dependencie `yaml:"dependencies"`
 }
 
 func (c *Config) LoadFromFile(filename string) error {
@@ -28,45 +29,30 @@ func (c *Config) LoadFromFile(filename string) error {
 		return errors.New(fmt.Sprintf("err.Error(): %v in %s\n", err.Error(), filename))
 	}
 
-	err = validateVersion(c.Version)
+	result := validators.ValidateVersion(c.Version)
+	if !result {
+		return errors.New(fmt.Sprintf("err.Error(): Invalid Format Version in %s\n", filename))
+
+	}
+
+	err = validators.ValidateTypeProject(c.TypeProject)
 	if err != nil {
 		return errors.New(fmt.Sprintf("err.Error(): %v in %s\n", err.Error(), filename))
-
 	}
 
-	err = validateTypeProject(c.TypeProject)
-	if err != nil {
-		return errors.New(fmt.Sprintf("err.Error(): %v in %s\n", err.Error(), filename))
-	}
+	for name := range c.Dependencies {
+		// Verificar si la dependencia existe
+		if dependencie, ok := c.Dependencies[name]; ok {
+			// Eliminar la entrada antigua del mapa
+			delete(c.Dependencies, name)
 
-	return nil
-}
+			// Cambiar el nombre de la dependencia
+			dependencie.Name = name
 
-func validateVersion(version string) error {
-	// Define una expresión regular para verificar el formato.
-	validFormat := regexp.MustCompile(`^[0-9]+(\.[0-9]+)*$`)
+			// Agregar la entrada actualizada al mapa
+			c.Dependencies[name] = dependencie
 
-	// Convierte el texto en una cadena.
-	versionStr := string(version)
-
-	// Verifica si el formato es válido.
-	if !validFormat.MatchString(versionStr) {
-		return errors.New("The version format is not valid in the")
-	}
-
-	return nil
-}
-
-func validateTypeProject(version string) error {
-	// Define una expresión regular para verificar el formato.
-	validFormat := regexp.MustCompile(`^(executable|static_library|dynamic_library)$`)
-
-	// Convierte el texto en una cadena.
-	versionStr := string(version)
-
-	// Verifica si el formato es válido.
-	if !validFormat.MatchString(versionStr) {
-		return errors.New("The typeProject format is not valid use (executable | static_library | dynamic_library) in the")
+		}
 	}
 
 	return nil
