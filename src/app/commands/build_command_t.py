@@ -18,6 +18,7 @@ from src.domain.types.status_code_t import StatusCodes_e
 
 from src.app.builders.builders import base_builders
 
+import config as CONFIG
 
 class BuildCommand_t(Command_i):
 
@@ -32,7 +33,7 @@ class BuildCommand_t(Command_i):
         next_dir = ""
         try:
             #Search NEXT_PACKAGES_DIR
-            next_dir = os.environ['NEXT_DIR']
+            next_dir = CONFIG.NEXT_DIR
             
             # Message(Info): NEXT_DIR find in 
             MH.message_info('NEXT_DIR in: ' + next_dir)
@@ -41,14 +42,15 @@ class BuildCommand_t(Command_i):
                 #TODO: this is the most insecure thing i have ever done repair asap
                 base_build = self.project.config.get('builds')[name_build]['base']
                 builder = base_builders[base_build]
+                builder.validate_build(project=self.project, name_build=name_build)
                 builder.build(project=self.project, name_build=name_build)
             except Exception as e:
                 MH.message_error('Base Project Undefind in build_command')
                 print(e)  
             
-        except:
+        except Exception as e:
             # Message(Error): Not Find NEXT_DIR
-            MH.message_error('It was not found ENV NEXT_DIR')  
+            MH.message_error(f'Exception {e}')  
             exit()
 
         return StatusCodes_e.SUCCESSFUL

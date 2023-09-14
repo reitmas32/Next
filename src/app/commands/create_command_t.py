@@ -18,6 +18,8 @@ from src.domain.types.status_code_t import StatusCodes_e
 
 from src.app.builders.builders import base_builders
 
+import config as CONFIG
+
 class CreateCommand_t(Command_i):
 
     def __init__(self) -> None:
@@ -30,7 +32,7 @@ class CreateCommand_t(Command_i):
         next_dir = ""
         try:
             #Search NEXT_PACKAGES_DIR
-            next_dir = os.environ['NEXT_DIR']
+            next_dir = CONFIG.NEXT_DIR
             
             # Message(Info): NEXT_DIR find in 
             MH.message_info('NEXT_DIR in: ' + next_dir)

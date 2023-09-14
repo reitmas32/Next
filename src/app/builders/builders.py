@@ -1,6 +1,6 @@
 from src.domain.types.dict_smart_t import DictSmart_t
 from src.app.builders.cmake_t import Cmake_t
-from src.app.builders.basic_t import Basic_t
+from app.builders.basic.basic_t import Basic_t
 
 
 base_builders = DictSmart_t('NoneValue')

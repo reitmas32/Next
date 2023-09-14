@@ -40,7 +40,7 @@ class Tree_t:
             
             # Get the configuration of project
             config_obj: Config_t = Config_t(root_dir, yaml_ruamel_port())
-            
+
             # Get the tree
             self.root = Tree_t.TreeDependencies(
                 config_obj.get('name_project'), 
@@ -77,20 +77,20 @@ class Tree_t:
         tree = Node_t(Dependencie_t( value_dependencie, num_deep = num_deep))
         
         # Get dependencies of current node
-        dependencies = Dependencie_t.get_dependencies(Dir_t(value_dependencie['dir']))
+        #dependencies = Dependencie_t.get_dependencies(Dir_t(value_dependencie['dir']))
         
         # Verify if exists dependencies
-        if(len(dependencies) >= 1):
-        
-            # iter all dependencies
-            for dep in dependencies:
-                
-                # Get data
-                key = JSON_TOOLS.jsonObjKey(dep)
-                value = JSON_TOOLS.jsonObjValue(dep)
-                
-                # Continue with the Tree
-                tree.new_child(Tree_t.TreeDependencies(key, value, num_deep + 1))
+        #if(len(dependencies) >= 1):
+        #
+        #    # iter all dependencies
+        #    for dep in dependencies:
+        #        
+        #        # Get data
+        #        key = JSON_TOOLS.jsonObjKey(dep)
+        #        value = JSON_TOOLS.jsonObjValue(dep)
+        #        
+        #        # Continue with the Tree
+        #        tree.new_child(Tree_t.TreeDependencies(key, value, num_deep + 1))
 
         return tree
             
