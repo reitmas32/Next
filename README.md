@@ -30,32 +30,6 @@ Available commands:
   version    view version the Nex
 
 Run "next <command> --help" for more information about a command.
-
-```
-### **Install with PyPi**
-
-``` bash
-pip install next-pm
-```
-    
-### **Install code stable**
-``` bash
-git clone https://github.com/reitmas32/Next.git
-```
-
-### **Install code development**
-``` bash
-git clone https://github.com/reitmas32/Next.git
-git checkout dev
-```
-
-### Setup
-``` bash
-cd $HOME # if your System is Windows use $LOCALAPPDATA
-mkdir .next
-cd .next/
-echo 'NEXT_DIR:<DIR_OF_NEXT_INSTALATION>
-NEXT_PACKAGES_DIR:<DIR_OF_NEXT_PACKAGES> > env.yaml
 ```
 
 ### Contributors
