@@ -18,4 +18,6 @@ func LoadViews() {
 
 	//Version
 	config.RootCommand.AddCommand(VersionCommand)
+	config.RootCommand.AddCommand(CreateCommand)
+
 }
