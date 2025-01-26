@@ -8,6 +8,7 @@ use interface::commands;
     name = "next",
     about = "Manage your Next app development",
     version = "1.0",
+    //TODO: Add mail account for the project
     author = "Next Development team <mail@placeholder.com>",
     subcommand_required = true,
     arg_required_else_help = true
@@ -19,11 +20,25 @@ struct Cli{
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    #[command(
+        name = "create",
+        about = "Create a new project of Next",
+    )]
     Create {
+        #[arg(
+            help = "The directory where the project will be created"
+        )]
         output_directory: String,
     },
 
+    #[command(
+        name = "run",
+        about = "Run your Next application"
+    )]
     Run{
+        #[arg(
+            help = "Options for running the application"
+        )]
         options: Option<String>,
     },
 
