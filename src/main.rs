@@ -42,24 +42,65 @@ enum Commands {
         options: Option<String>,
     },
 
+    #[command(
+        name = "add",
+        about = "Add to property of current Next project"
+    )]
     Add,
 
+    #[command(
+        name = "build",
+        about = "Build a project of Next"
+    )]
     Build,
 
+    #[command(
+        name = "check_env",
+        about = "Check env for the NextPackages"
+    )]
     CheckEnv,
 
+    #[command(
+        name = "clean",
+        about = "Clean a project of Next"
+    )]
     Clean,
 
+    #[command(
+        name = "exce",
+        //Is this description correct? I copied from the README but idk lol
+        about = "Add to property of Next project"
+    )]
     Exce,
 
+    #[command(
+        name = "get",
+        about = "Get property of the current Next project"
+    )]
     Get,
 
+    #[command(
+        name = "info",
+        about = "View info of current Next project"
+    )]
     Info,
 
+    #[command(
+        name = "set",
+        about = "Set property for the current Next project"
+    )]
     Set,
 
+    #[command(
+        name = "use",
+        about = "Add new library in current project"
+    )]
     Use,
 
+    #[command(
+        name = "version",
+        about = "View version of Next"
+    )]
     Version,
 }
 
