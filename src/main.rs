@@ -1,32 +1,60 @@
 mod interface;
 
-use structopt::StructOpt;
+use clap::{Parser, Subcommand};
 use interface::commands;
 
-#[derive(StructOpt)]
-#[structopt(name = "next", about = "Una aplicación de ejemplo con comandos")]
-enum Next {
-    #[structopt(name = "create", about = "Crea un nuevo proyecto")]
+#[derive(Parser, Debug)]
+#[command(
+    name = "next",
+    about = "Manage your Next app development",
+    version = "1.0",
+    author = "Next Development team <mail@placeholder.com>",
+    subcommand_required = true,
+    arg_required_else_help = true
+)]
+struct Cli{
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand, Debug)]
+enum Commands {
     Create {
-        #[structopt(help = "El directorio donde se creará el proyecto")]
-        path: String,
+        output_directory: String,
     },
 
-    #[structopt(name = "version", about = "Muestra la versión de la aplicación")]
-    Version,
+    Run{
+        options: Option<String>,
+    },
 
-    #[structopt(name = "info", about = "Muestra información sobre la aplicación")]
+    Add,
+
+    Build,
+
+    CheckEnv,
+
+    Clean,
+
+    Exce,
+
+    Get,
+
     Info,
+
+    Set,
+
+    Use,
+
+    Version,
 }
 
 fn main() {
-    match Next::from_args() {
-        Next::Create { path } => commands::create::create(path),
-        Next::Version => {
-            println!("next versión 1.0");
-        },
-        Next::Info => {
-            println!("next es una aplicación de ejemplo.");
-        },
+    let cli = Cli::parse();
+
+    match cli.command {
+        Commands::Create { output_directory } => commands::create::create(output_directory),
+        //TODO: Add the rest of the commands
+        _ => println!("Not implemented")
     }
+
 }
